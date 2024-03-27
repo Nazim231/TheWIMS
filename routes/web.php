@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ShopsController as AdminManageShops;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 /*
@@ -13,21 +14,23 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-Route::get('/', function () {
-    return view('login');
-})->name('login');
-Route::get('/signup', function () {
-    return view('signup');
-})->name('signup');
+Route::view('/', 'login')->name('login');
+Route::view('/signup', 'signup')->name('signup');
 
 
+// Auth Routes
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login')->name('auth.login');
     Route::post('signup', 'createAccount')->name('auth.signup');
     Route::get('logout', 'logout')->name('auth.logout');
 });
+
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/home', function () {
-        return view('welcome');
-    })->name('home');
+    Route::view('/home', 'admin.home')->name('home');
+    Route::view('/employees', 'admin.employees')->name('employees');
+    // Shop Routes
+    Route::controller(AdminManageShops::class)->group(function () {
+        Route::get('/shops', 'showPage')->name('shops');
+        Route::post('/shop', 'addShop')->name('shops.add');
+    });
 });
