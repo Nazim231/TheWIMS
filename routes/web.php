@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ShopsController as AdminManageShops;
+use App\Http\Controllers\Admin\EmployeesController as AdminManageEmployees;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 /*
@@ -27,10 +28,14 @@ Route::controller(AuthController::class)->group(function () {
 
 Route::group(['middleware' => 'auth'], function () {
     Route::view('/home', 'admin.home')->name('home');
-    Route::view('/employees', 'admin.employees')->name('employees');
     // Shop Routes
     Route::controller(AdminManageShops::class)->group(function () {
         Route::get('/shops', 'showPage')->name('shops');
         Route::post('/shop', 'addShop')->name('shops.add');
+    });
+    // Employees Routes
+    Route::controller(AdminManageEmployees::class)->group(function () {
+        Route::get('/employees', 'showPage')->name('employees');
+        Route::post('/employee', 'addEmployee')->name('employees.add');
     });
 });
