@@ -35,7 +35,8 @@
                         class="nav-link p-4 rounded text-white {{ Route::is('employees') ? 'active' : '' }}">Employees</a>
                     <a href="{{ route('categories') }}"
                         class="nav-link p-4 rounded text-white {{ Route::is('categories') ? 'active' : '' }}">Categories</a>
-                    <a href="#" class="nav-link p-4 rounded text-white">Stocks</a>
+                    <a href="{{ route('stocks') }}"
+                        class="nav-link p-4 rounded text-white {{ Route::is('stocks') ? 'active' : '' }}">Stocks</a>
                 </nav>
             </aside>
             {{-- Main Content --}}

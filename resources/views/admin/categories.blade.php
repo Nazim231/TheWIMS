@@ -48,7 +48,7 @@
                             <input type="text" name="name" id="name" class="form-control">
                         </div>
                         <div class="text-end">
-                            <button class="btn btn-outline" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-outline" data-bs-dismiss="modal">Close</button>
                             <input type="submit" value="Add Category" class="btn btn-dark">
                         </div>
                     </form>
@@ -57,7 +57,7 @@
         </div>
     </div>
     @if (sizeof($categories) > 0)
-        <table class="table table-stripped">
+        <table class="table table-striped">
             <thead>
                 <th>ID</th>
                 <th>Name</th>

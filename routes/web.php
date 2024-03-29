@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\ShopsController as AdminManageShops;
 use App\Http\Controllers\Admin\EmployeesController as AdminManageEmployees;
 use App\Http\Controllers\Admin\CategoriesController as AdminManageCategories;
+use App\Http\Controllers\Admin\StocksController as AdminManageStocks;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 /*
@@ -33,7 +34,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::controller(AdminManageShops::class)->group(function () {
         Route::get('/shops', 'showPage')->name('shops');
         Route::post('/shop', 'addShop')->name('shops.add');
-    });
+    }); 
     // Employees Routes
     Route::controller(AdminManageEmployees::class)->group(function () {
         Route::get('/employees', 'showPage')->name('employees');
@@ -43,5 +44,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::controller(AdminManageCategories::class)->group(function () {
         Route::get('/categories', 'showPage')->name('categories');
         Route::post('/category', 'addCategory')->name('categories.add');
+    });
+
+    Route::controller(AdminManageStocks::class)->group(function () {
+        Route::get('/stocks', 'showPage')->name('stocks');
     });
 });
