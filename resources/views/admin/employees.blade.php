@@ -35,7 +35,7 @@
             @endif
         </div>
     @endif
-    <div div class="modal fade" id="addEmpModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="addEmpLabel"
+    <div class="modal fade" id="addEmpModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="addEmpLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
