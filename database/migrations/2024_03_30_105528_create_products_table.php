@@ -9,14 +9,15 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('description');
-            $table->integer('brand_id');
-            $table->integer('category_id');
+            $table->string('description')->nullable();
+            $table->bigInteger('brand');
+            $table->bigInteger('category');
             $table->timestamps();
         });
     }

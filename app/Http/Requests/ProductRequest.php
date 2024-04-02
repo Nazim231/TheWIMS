@@ -18,6 +18,22 @@ class ProductRequest extends FormRequest
     }
 
     /**
+     * Prepare the data for validation
+     */
+    protected function prepareForValidation(): void
+    {
+        if (sizeof($this->variation_selected) == 0 || $this->variation_selected == null) return;
+
+        $this->merge([
+            'variation_name' => array_slice($this->variation_name, 0, sizeof($this->variation_selected)),
+            'variation_qty' => array_slice($this->variation_qty, 0, sizeof($this->variation_selected)),
+            'variation_mrp' => array_slice($this->variation_mrp, 0, sizeof($this->variation_selected)),
+            'variation_selling_price' => array_slice($this->variation_selling_price, 0, sizeof($this->variation_selected)),
+        ]);
+
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
@@ -30,10 +46,14 @@ class ProductRequest extends FormRequest
             'category' => 'required|gt:0',
             'variation_type' => 'required_if:variation,on',
             'sub_variation_type' => 'required_if:variation,on',
-            'mrp' => 'required|gt:0',
-            'selling_price' => 'required|gt:0|lte:mrp',
-            'qty' => 'required|gt:0',
-            'variation_name' => 'required'
+            'variation_mrp' => 'required|min:1',
+            "variation_mrp.*" => 'required_if:variation_selected.*,on',
+            'variation_selling_price' => 'required|min:1',
+            'variation_selling_price.*' => 'required_if:variation_selected.*,on|lte:variation_mrp.*',
+            'variation_qty' => 'required|min:1',
+            'variation_qty.*' => 'required_if:variation_selected.*,on|gt:0',
+            'variation_name' => 'required|min:1',
+            'variation_name.*' => 'required_if:variation_selected.*,on'
         ];
     }
 

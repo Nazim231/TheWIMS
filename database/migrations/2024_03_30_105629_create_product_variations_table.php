@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('product_variations', function (Blueprint $table) {
             $table->id();
-            $table->integer('product_id');
+            $table->bigInteger('product_id');
             $table->string('SKU');
             $table->double('price', $places = 2);
             $table->double('MRP', $places = 2);
-            $table->double('weight', $places = 2);
-            $table->double('height', $places = 2);
-            $table->double('width', $places = 2);
-            $table->double('length', $places = 2);
+            $table->double('weight', $places = 2)->nullable();
+            $table->double('height', $places = 2)->nullable();
+            $table->double('width', $places = 2)->nullable();
+            $table->double('length', $places = 2)->nullable();
             $table->string('color');
             $table->string('size');
             $table->timestamps();
