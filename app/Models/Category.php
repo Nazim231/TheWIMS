@@ -16,4 +16,11 @@ class Category extends Model
     protected $attributes = [
         'parent_category_id' => null
     ];
+
+    /**
+     * Get product of Category
+     */
+    public function products() {
+        return $this->hasMany(Product::class);
+    }
 }

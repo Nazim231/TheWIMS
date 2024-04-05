@@ -7,17 +7,7 @@
 
     <title>TheWiMS | @yield('breadcrumb')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        html,
-        body {
-            height: 100% !important;
-        }
-
-        .nav-link.active {
-            background: white;
-            color: black !important;
-        }
-    </style>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body>
@@ -47,6 +37,4 @@
     </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-@yield('script')
-
 </html>

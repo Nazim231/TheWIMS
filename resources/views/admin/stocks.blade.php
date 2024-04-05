@@ -23,7 +23,7 @@
     {{-- Add Shop Modal --}}
     <div class="modal fade" id="addStockModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="addStockLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="addStockModal">Add Stock</h1>
@@ -38,16 +38,20 @@
                         {{-- input product name --}}
                         <div class="form-group">
                             <label for="name">Product Name</label>
-                            <input type="text" name="name" id="name" class="form-control mt-2" value="{{old('name')}}">
+                            <input type="text" name="name" id="name" class="form-control mt-2"
+                                value="{{ old('name') }}">
                         </div>
                         <div class="d-flex gap-4 align-items-center">
                             {{-- Category --}}
                             <div class="form-group flex-grow-1">
                                 <label for="category">Category</label>
                                 <select name="category" id="category" class="form-select mt-2">
-                                    <option value="0" {{old('category') == 0 ? 'selected' : ''}}>Select Product Category</option>
+                                    <option value="0" {{ old('category') == 0 ? 'selected' : '' }}>Select Product
+                                        Category</option>
                                     @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}" {{old('category') == $category->id ? 'selected' : ''}}>{{ $category->name }}</option>
+                                        <option value="{{ $category->id }}"
+                                            {{ old('category') == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -55,17 +59,20 @@
                             <div class="form-group flex-grow-1">
                                 <label for="brand">Brand</label>
                                 <select name="brand" id="brand" class="form-select mt-2">
-                                    <option value="0" {{old('brand') == 0 ? 'selected' : ''}}>Select Product Brand</option>
-                                    {{-- TODO :: Get the Brands from the database and show them here --}}
+                                    <option value="0" {{ old('brand') == 0 ? 'selected' : '' }}>Select Product
+                                        Brand</option>
                                     @foreach ($brands as $brand)
-                                        <option value="{{ $brand->id }}" {{old('brand') == $brand->id ? 'seleced' : ''}}>{{ $brand->name }}</option>
+                                        <option value="{{ $brand->id }}"
+                                            {{ old('brand') == $brand->id ? 'selected' : '' }}>{{ $brand->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
                         {{-- Checkbox (Add Variation) --}}
                         <div class="form-check">
-                            <input type="checkbox" name="variation" id="variation" class="form-check-input" {{ (old('variation') == 'on') ? 'checked' : ''}}>
+                            <input type="checkbox" name="variation" id="variation" class="form-check-input"
+                                {{ old('variation') == 'on' ? 'checked' : '' }}>
                             <label for="variation" class="form-check-label">Product have variation</label>
                         </div>
                         {{-- Variation Container --}}
@@ -74,20 +81,24 @@
                             <div class="form-group col-7">
                                 <label for="variation_type">Variation Type</label>
                                 <select name="variation_type" id="variation_type" class="form-select mt-2">
-                                    <option value="0" {{old('variation') == 0 ? 'selected' : ''}}>Select Variation Type</option>
-                                    <option value="size" {{old('variation') == 'size' ? 'selecte' : ''}}>Size</option>
-                                    <option value="color" {{old('variation') == 'color' ? 'selecte' : ''}}>Color</option>
+                                    <option value="0" {{ old('variation') == 0 ? 'selected' : '' }}>Select
+                                        Variation Type</option>
+                                    <option value="size" {{ old('variation') == 'size' ? 'selected' : '' }}>Size
+                                    </option>
+                                    <option value="color" {{ old('variation') == 'color' ? 'selected' : '' }}>Color
+                                    </option>
                                 </select>
                             </div>
                             {{-- input no. of variations --}}
                             <div class="form-group col-5">
                                 <label for="variation_numbers">No. of Variations</label>
                                 <input type="number" name="variation_numbers" id="variation_numbers"
-                                    class="form-control mt-2" value = "{{old('variation_numbers')}}">
+                                    class="form-control mt-2" value = "{{ old('variation_numbers') }}">
                             </div>
                             {{-- Checkbox (Add Sub Variation) --}}
                             <div class="form-check mt-4 ms-3">
-                                <input type="checkbox" name="sub_variation" id="sub_variation" class="form-check-input" {{ (old('sub_variation') == 'on') ? 'checked' : ''}}>
+                                <input type="checkbox" name="sub_variation" id="sub_variation" class="form-check-input"
+                                    {{ old('sub_variation') == 'on' ? 'checked' : '' }}>
                                 <label for="sub_variation" class="form-check-label">Product have sub variations</label>
                             </div>
                         </div>
@@ -97,16 +108,20 @@
                             <div class="form-group col-7">
                                 <label for="sub_variation_type">Sub Variation Type</label>
                                 <select name="sub_variation_type" id="sub_variation_type" class="form-select mt-2">
-                                    <option value="0" {{old('sub_variation') == 0 ? 'selected' : ''}}>Select Sub Variation Type</option>
-                                    <option value="size" {{old('sub_variation') == 'size' ? 'selecte' : ''}}>Size</option>
-                                    <option value="color" {{old('sub_variation') == 'color' ? 'selecte' : ''}}>Color</option>
+                                    <option value="0" {{ old('sub_variation') == 0 ? 'selected' : '' }}>Select Sub
+                                        Variation Type</option>
+                                    <option value="size" {{ old('sub_variation') == 'size' ? 'selected' : '' }}>Size
+                                    </option>
+                                    <option value="color" {{ old('sub_variation') == 'color' ? 'selected' : '' }}>
+                                        Color
+                                    </option>
                                 </select>
                             </div>
                             {{-- input no. of sub variations --}}
                             <div class="form-group col-5">
                                 <label for="sub_variation_numbers">No. of Sub Variation</label>
                                 <input type="number" name="sub_variation_numbers" id="sub_variation_numbers"
-                                    class="form-control mt-2" value="{{old('sub_variation_numbers')}}">
+                                    class="form-control mt-2" value="{{ old('sub_variation_numbers') }}">
                             </div>
                         </div>
                         {{-- Generate Variations Table Button --}}
@@ -115,7 +130,7 @@
 
                         {{-- Variation Table Container --}}
                         <div id="variationContainer">
-                            {{--! When page is reloaded back with error the variations details doesn't exists, work over this --}}
+                            {{-- ! When page is reloaded back with error the variations details doesn't exists, work over this --}}
                         </div>
                         {{-- Buttons --}}
                         <div class="text-end">
@@ -129,18 +144,24 @@
     </div>
 
     @if (sizeof($stocks) > 0)
-        <table class="table table-striped">
+        <table class="table table-bordered table-striped mt-4">
             <thead>
                 <th>ID</th>
                 <th>Name</th>
                 <th>Quantity</th>
+                <th>Brand</th>
+                <th>Category</th>
+                <th>Actions</th>
             </thead>
             <tbody>
                 @foreach ($stocks as $stockItem)
                     <tr>
                         <td>{{ $stockItem->id }}</td>
                         <td>{{ $stockItem->name }}</td>
-                        <td>{{ $stockItem->qty }}</td>
+                        <td>{{ $stockItem->variants_sum_quantity }}</td>
+                        <td>{{ $stockItem->brand->name }}</td>
+                        <td>{{ $stockItem->category->name }}</td>
+                        <td><a href="{{route('stocks')}}" class="btn btn-link text-success text-decoration-none p-0">View</a></td>
                     </tr>
                 @endforeach
             </tbody>
@@ -148,60 +169,4 @@
     @else
         <p class="text-center text-muted">Warehouse is empty</p>
     @endif
-@endsection
-
-@section('script')
-    <script>
-        const btnGenerate = document.getElementById('generateVTable');
-        const form = document.getElementById('addProductForm');
-        const variationContainer = document.getElementById('variationContainer');
-        btnGenerate.addEventListener('click', function() {
-            const formData = Object.fromEntries(new FormData(form));
-
-            if (!formData.variation) {
-                console.log(`No Variation Found`);
-                return;
-            }
-
-            const tableHeadings = ['Select', 'Variation Name', 'Qty.', 'MRP', 'Selling Price'];
-
-            const variationTable = document.createElement('table');
-            variationTable.classList.add('table');
-            variationTable.classList.add('table-striped');
-            const variationHead = document.createElement('thead');
-            const variationHeaderRow = document.createElement('tr');
-            for (i = 0; i < tableHeadings.length; i++) {
-                const column = document.createElement('th');
-                column.innerHTML = tableHeadings[i];
-                variationHeaderRow.append(column);
-            }
-
-            variationHead.append(variationHeaderRow);
-            variationTable.append(variationHead);
-            variationContainer.append(variationTable);
-
-            const totalVariations = formData.variation_numbers * formData.sub_variation_numbers;
-
-            const fieldTypes = ['checkbox', 'text', 'number', 'number', 'number'];
-            const fieldNames = ['selected', 'name', 'qty', 'mrp', 'selling_price'];
-
-
-            const variationTableBody = document.createElement('tbody');
-            variationTable.append(variationTableBody);
-            for (i = 0; i < totalVariations; i++) {
-                const tableRow = document.createElement('tr');
-                for (j = 0; j < fieldTypes.length; j++) {
-                    const tableCol = document.createElement('td');
-                    const colItem = document.createElement('input');
-                    colItem.setAttribute('type', fieldTypes[j]);
-                    colItem.setAttribute('name', `variation_${fieldNames[j]}[]`);
-                    colItem.classList.add(j === 0 ? 'form-select-input' : 'form-control');
-                    tableCol.append(colItem);
-                    tableRow.append(tableCol);
-                }
-                variationTableBody.append(tableRow);
-            }
-
-        });
-    </script>
 @endsection
