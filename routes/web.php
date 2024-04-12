@@ -49,5 +49,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::controller(AdminManageStocks::class)->group(function () {
         Route::get('/stocks', 'showPage')->name('stocks');
         Route::post('/stock', 'addStock')->name('stocks.add');
+        Route::get('/stock/{id}', 'showProduct')->name('stocks.product');
+        Route::post('/add-variation', 'addVariations')->name('stocks.product.add');
     });
 });

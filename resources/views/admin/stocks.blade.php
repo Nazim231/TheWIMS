@@ -4,6 +4,8 @@
     Stocks
 @endsection
 
+@vite(['resources/js/stocks.js'])
+
 @section('main-content')
     <div class="text-end">
         <button class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#addStockModal">
@@ -161,7 +163,7 @@
                         <td>{{ $stockItem->variants_sum_quantity }}</td>
                         <td>{{ $stockItem->brand->name }}</td>
                         <td>{{ $stockItem->category->name }}</td>
-                        <td><a href="{{route('stocks')}}" class="btn btn-link text-success text-decoration-none p-0">View</a></td>
+                        <td><a href="{{route('stocks.product', $stockItem->id)}}" class="btn btn-link text-success text-decoration-none p-0">View</a></td>
                     </tr>
                 @endforeach
             </tbody>

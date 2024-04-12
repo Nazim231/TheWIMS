@@ -9,6 +9,9 @@ class Product extends Model
 {
     use HasFactory;
 
+    /**
+     * Mass assignable columns
+     */
     protected $fillable = [
         'name',
         'description',
@@ -16,6 +19,9 @@ class Product extends Model
         'category_id'
     ];
 
+    /**
+     * Default values for the columns
+     */
     protected $attributes = [
         'description' => null,
     ];

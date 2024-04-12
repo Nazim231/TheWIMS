@@ -59,7 +59,7 @@ class ProductRequest extends FormRequest
             'variation_type' => 'required_if:variation,on',
             'sub_variation_type' => 'required_if:variation,on',
             'variation_mrp' => 'required|min:1',
-            "variation_mrp.*" => 'required_if:variation_selected.*,on',
+            'variation_mrp.*' => 'required_if:variation_selected.*,on',
             'variation_selling_price' => 'required|min:1',
             'variation_selling_price.*' => 'required_if:variation_selected.*,on|lte:variation_mrp.*',
             'variation_qty' => 'required|min:1',
