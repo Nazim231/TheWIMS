@@ -17,16 +17,10 @@
             <aside class="col-2 bg-dark h-100">
                 <p class="display-4 text-white p-4">The<span class="fw-bold">WIMS</span></p>
                 <nav class="nav flex-column gap-4">
-                    <a href="{{ route('home') }}"
-                        class="nav-link p-4 rounded text-white {{ Route::is('home') ? 'active' : '' }}">Home</a>
-                    <a href="{{ route('shops') }}"
-                        class="nav-link p-4 rounded text-white {{ Route::is('shops') ? 'active' : '' }}">Shops</a>
-                    <a href="{{ route('employees') }}"
-                        class="nav-link p-4 rounded text-white {{ Route::is('employees') ? 'active' : '' }}">Employees</a>
-                    <a href="{{ route('categories') }}"
-                        class="nav-link p-4 rounded text-white {{ Route::is('categories') ? 'active' : '' }}">Categories</a>
-                    <a href="{{ route('stocks') }}"
-                        class="nav-link p-4 rounded text-white {{ Route::is('stocks') ? 'active' : '' }}">Stocks</a>
+                    <a href="{{ route('employee.home') }}"
+                        class="nav-link p-4 rounded text-white {{ Route::is('employee.home') ? 'active' : '' }}">Home</a>
+                    <a href="{{ route('employee.stocks') }}"
+                        class="nav-link p-4 rounded text-white {{ Route::is('employee.stocks') ? 'active' : '' }}">Stocks</a>
                 </nav>
             </aside>
             {{-- Main Content --}}

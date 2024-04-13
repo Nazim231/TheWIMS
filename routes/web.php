@@ -17,39 +17,47 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-Route::view('/', 'login')->name('login');
-Route::view('/signup', 'signup')->name('signup');
-
-
 // Auth Routes
 Route::controller(AuthController::class)->group(function () {
+    Route::get('/login', 'showLogin')->name('login');
+    Route::get('/signup', 'showSignUp')->name('signup');
     Route::post('login', 'login')->name('auth.login');
     Route::post('signup', 'createAccount')->name('auth.signup');
     Route::get('logout', 'logout')->name('auth.logout');
 });
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::view('/home', 'admin.home')->name('home');
-    // Shop Routes
-    Route::controller(AdminManageShops::class)->group(function () {
-        Route::get('/shops', 'showPage')->name('shops');
-        Route::post('/shop', 'addShop')->name('shops.add');
-    }); 
-    // Employees Routes
-    Route::controller(AdminManageEmployees::class)->group(function () {
-        Route::get('/employees', 'showPage')->name('employees');
-        Route::post('/employee', 'addEmployee')->name('employees.add');
-    });
-    // Categories Routes
-    Route::controller(AdminManageCategories::class)->group(function () {
-        Route::get('/categories', 'showPage')->name('categories');
-        Route::post('/category', 'addCategory')->name('categories.add');
+
+    Route::group(['middleware' => 'is_admin', 'prefix' => 'admin/', 'as' => 'admin.'], function () {
+        
+        Route::view('/', 'admin.home')->name('home');
+        // Shop Routes
+        Route::controller(AdminManageShops::class)->group(function () {
+            Route::get('/shops', 'showPage')->name('shops');
+            Route::post('/shop', 'addShop')->name('shops.add');
+        });
+        // Employee Routes
+        Route::controller(AdminManageEmployees::class)->group(function () {
+            Route::get('/employees', 'showPage')->name('employees');
+            Route::post('/employee', 'addEmployee')->name('employees.add');
+        });
+        // Category Routes
+        Route::controller(AdminManageCategories::class)->group(function () {
+            Route::get('/categories', 'showPage')->name('categories');
+            Route::post('/category', 'addCategory')->name('categories.add');
+        });
+        // Stock Routes
+        Route::controller(AdminManageStocks::class)->group(function () {
+            Route::get('/stocks', 'showPage')->name('stocks');
+            Route::post('/stock', 'addStock')->name('stocks.add');
+            Route::get('/stock/{id}', 'showProduct')->name('stocks.product');
+            Route::post('/add-variation', 'addVariations')->name('stocks.product.add');
+        });
     });
 
-    Route::controller(AdminManageStocks::class)->group(function () {
-        Route::get('/stocks', 'showPage')->name('stocks');
-        Route::post('/stock', 'addStock')->name('stocks.add');
-        Route::get('/stock/{id}', 'showProduct')->name('stocks.product');
-        Route::post('/add-variation', 'addVariations')->name('stocks.product.add');
+    Route::group(['prefix' => 'employee', 'as' => 'employee.'], function () {
+        Route::view('/home', 'employees.home')->name('home');
+        Route::get('/stocks')->name('stocks');
     });
+    // Route::view('/home', 'employees.home')->name('home');
 });

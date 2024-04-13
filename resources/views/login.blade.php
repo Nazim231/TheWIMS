@@ -1,3 +1,10 @@
+@php
+    if (Auth::check()) {
+        return redirect()->intended('/');
+    } else {
+    }
+@endphp
+
 @extends('layouts.auth')
 
 @section('breadcrumb')
