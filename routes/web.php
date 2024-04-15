@@ -1,11 +1,15 @@
 <?php
 
-use App\Http\Controllers\Admin\ShopsController as AdminManageShops;
-use App\Http\Controllers\Admin\EmployeesController as AdminManageEmployees;
-use App\Http\Controllers\Admin\CategoriesController as AdminManageCategories;
-use App\Http\Controllers\Admin\StocksController as AdminManageStocks;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Employee\HomeController;
+use App\Http\Controllers\Employee\StocksController;
+use App\Http\Controllers\Admin\ShopsController as AdminManageShops;
+use App\Http\Controllers\Admin\StocksController as AdminManageStocks;
+use App\Http\Controllers\Admin\EmployeesController as AdminManageEmployees;
+use App\Http\Controllers\Admin\CategoriesController as AdminManageCategories;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,6 +21,13 @@ use App\Http\Controllers\AuthController;
 |
 */
 
+
+Route::get('/', function () {
+    if (Auth::check())
+        return redirect()->route(Auth::user()->is_admin ? 'admin.home' : 'employee.home');
+    else
+        return redirect()->route('login');
+});
 // Auth Routes
 Route::controller(AuthController::class)->group(function () {
     Route::get('/login', 'showLogin')->name('login');
@@ -29,7 +40,7 @@ Route::controller(AuthController::class)->group(function () {
 Route::group(['middleware' => 'auth'], function () {
 
     Route::group(['middleware' => 'is_admin', 'prefix' => 'admin/', 'as' => 'admin.'], function () {
-        
+
         Route::view('/', 'admin.home')->name('home');
         // Shop Routes
         Route::controller(AdminManageShops::class)->group(function () {
@@ -56,8 +67,14 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::group(['prefix' => 'employee', 'as' => 'employee.'], function () {
-        Route::view('/home', 'employees.home')->name('home');
-        Route::get('/stocks')->name('stocks');
+        Route::controller(HomeController::class)->group(function () {
+            Route::get('/', 'index')->name('home');
+        });
+
+        Route::controller(StocksController::class)->group(function () {
+            Route::get('/stocks', 'index')->name('stocks');
+            Route::get('/add-stocks', 'addStockToShopPage')->name('products.request.page');
+            Route::post('/select-variations', 'getSelectedProductVariations')->name('stocks.request.variations');
+        });
     });
-    // Route::view('/home', 'employees.home')->name('home');
 });

@@ -34,7 +34,7 @@
                 <div class="modal-body">
                     {{-- Add Product Form --}}
                     {{-- TODO :: Change the form to the Multi-Step Form for better User Accessibility --}}
-                    <form action="{{ route('stocks.add') }}" method="post" class="d-flex flex-column gap-4"
+                    <form action="{{ route('admin.stocks.add') }}" method="post" class="d-flex flex-column gap-4"
                         id="addProductForm">
                         @csrf
                         {{-- input product name --}}
@@ -163,7 +163,7 @@
                         <td>{{ $stockItem->variants_sum_quantity }}</td>
                         <td>{{ $stockItem->brand->name }}</td>
                         <td>{{ $stockItem->category->name }}</td>
-                        <td><a href="{{route('stocks.product', $stockItem->id)}}" class="btn btn-link text-success text-decoration-none p-0">View</a></td>
+                        <td><a href="{{route('admin.stocks.product', $stockItem->id)}}" class="btn btn-link text-success text-decoration-none p-0">View</a></td>
                     </tr>
                 @endforeach
             </tbody>

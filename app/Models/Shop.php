@@ -8,10 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Shop extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
         'name',
         'address'
     ];
 
+    public function shopOwner()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

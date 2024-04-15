@@ -71,7 +71,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{ route('stocks.product.add') }}" method="post" id="addVariationForm" class="d-flex flex-column gap-3">
+                        <form action="{{ route('admin.stocks.product.add') }}" method="post" id="addVariationForm" class="d-flex flex-column gap-3">
                             @csrf
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
                             <div id="variation-container" class="row">
