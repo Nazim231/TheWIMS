@@ -75,6 +75,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/stocks', 'index')->name('stocks');
             Route::get('/add-stocks', 'addStockToShopPage')->name('products.request.page');
             Route::post('/select-variations', 'getSelectedProductVariations')->name('stocks.request.variations');
+            Route::get('/select-variations', 'viewProductVariations')->name('stocks.view.variations');
+            Route::post('/place-order', 'placeOrder')->name('stocks.order');
         });
     });
 });

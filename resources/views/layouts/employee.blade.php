@@ -20,7 +20,7 @@
                     <a href="{{ route('employee.home') }}"
                         class="nav-link p-4 rounded text-white {{ Route::is('employee.home') ? 'active' : '' }}">Home</a>
                     <a href="{{ route('employee.stocks') }}"
-                        class="nav-link p-4 rounded text-white {{ Route::is('employee.stocks') ? 'active' : '' }}">Stocks</a>
+                        class="nav-link p-4 rounded text-white {{ Route::is('employee.stocks*') ? 'active' : '' }}">Stocks</a>
                 </nav>
                 <a href="{{ route('auth.logout') }}" class="btn btn-outline-light mt-auto mb-4 p-3">Logout</a>
             </aside>
