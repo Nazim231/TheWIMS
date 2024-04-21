@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\ShopsController as AdminManageShops;
 use App\Http\Controllers\Admin\StocksController as AdminManageStocks;
 use App\Http\Controllers\Admin\EmployeesController as AdminManageEmployees;
 use App\Http\Controllers\Admin\CategoriesController as AdminManageCategories;
+use App\Http\Controllers\Admin\OrdersController as AdminManageOrders;
+use App\Http\Controllers\Employee\OrdersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,6 +66,11 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/stock/{id}', 'showProduct')->name('stocks.product');
             Route::post('/add-variation', 'addVariations')->name('stocks.product.add');
         });
+        // Orders Route
+        Route::controller(AdminManageOrders::class)->group(function () {
+            Route::get('/order', 'index')->name('order');
+            Route::get('/order/{id}', 'showOrder')->name('order.show');
+        });
     });
 
     Route::group(['prefix' => 'employee', 'as' => 'employee.'], function () {
@@ -77,6 +84,10 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/select-variations', 'getSelectedProductVariations')->name('stocks.request.variations');
             Route::get('/select-variations', 'viewProductVariations')->name('stocks.view.variations');
             Route::post('/place-order', 'placeOrder')->name('stocks.order');
+        });
+
+        Route::controller(OrdersController::class)->group(function () {
+            Route::get('/orders', 'index')->name('orders');
         });
     });
 });

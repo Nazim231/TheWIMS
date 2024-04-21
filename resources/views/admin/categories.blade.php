@@ -41,7 +41,7 @@
                     <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('categories.add') }}" method="POST" class="d-flex flex-column gap-4">
+                    <form action="{{ route('admin.categories.add') }}" method="POST" class="d-flex flex-column gap-4">
                         @csrf
                         <div class="form-group">
                             <label for="name">Category Name</label>
@@ -57,7 +57,7 @@
         </div>
     </div>
     @if (sizeof($categories) > 0)
-        <table class="table table-striped">
+        <table class="table table-striped table-bordered mt-4">
             <thead>
                 <th>ID</th>
                 <th>Name</th>

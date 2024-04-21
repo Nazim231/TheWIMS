@@ -56,7 +56,7 @@
                     <input type="submit" value="Place Order" class="btn btn-dark">
                 </div>
             </form>
-            @else
+        @else
             <p class="text-danger text-center">Failed to get variations, please try again</p>
         @endif
     </div>

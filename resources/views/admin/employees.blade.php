@@ -44,7 +44,7 @@
                     <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('employees.add') }}" method="post" class="d-flex flex-column gap-4">
+                    <form action="{{ route('admin.employees.add') }}" method="post" class="d-flex flex-column gap-4">
                         @csrf
                         <div class="form-group">
                             <label for="name">Name</label>
@@ -67,7 +67,7 @@
     </div>
 
     @if (sizeof($employees) > 0)
-        <table class="table table-striped table-hover mt-4">
+        <table class="table table-striped table-bordered table-hover mt-4">
             <thead>
                 <th>ID</th>
                 <th>Name</th>
