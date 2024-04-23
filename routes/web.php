@@ -70,6 +70,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::controller(AdminManageOrders::class)->group(function () {
             Route::get('/order', 'index')->name('order');
             Route::get('/order/{id}', 'showOrder')->name('order.show');
+            Route::post('/order', 'approveOrder')->name('order.approve');
         });
     });
 
