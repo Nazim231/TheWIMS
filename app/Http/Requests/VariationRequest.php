@@ -33,6 +33,7 @@ class VariationRequest extends FormRequest
             'variation_color' => array_slice($this->variation_color, 0, $variationNumbers),
             'variation_size' => array_slice($this->variation_size, 0, $variationNumbers),
             'variation_qty' => array_slice($this->variation_qty, 0, $variationNumbers),
+            'variations_count' => $variationNumbers,
         ]);
 
     }
@@ -58,7 +59,8 @@ class VariationRequest extends FormRequest
             'variation_sku.*' => 'required_if:variation_selected.*,on|unique:product_variations,sku',
             'variation_selling_price.*' => 'required_if:variation_selected.*,on | gt:0 | lte:variation_mrp.*',
             'variation_mrp.*' => 'required_if:variation_selected.*,on | gt:0',
-            'variation_qty.*' => 'required_if:variation_selected.*,on | gt:0'
+            'variation_qty.*' => 'required_if:variation_selected.*,on | gt:0',
+            'variations_count' => '',
         ];
     }
 

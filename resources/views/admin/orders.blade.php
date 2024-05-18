@@ -47,7 +47,9 @@
                         </td>
                         <td class="d-flex gap-2 justify-content-center">
                             <a href="{{ route('admin.order.show', $order->id) }}" class="btn btn-sm text-success btn-link text-decoration-none">View</a>
+                            @if ($order->status == 'Processing' || $order->status == 'Partially Delivered')
                             <a href="" class="btn btn-sm text-danger btn-link text-decoration-none">Reject</a>
+                            @endif
                         </td>
                     </tr>
                 @endforeach

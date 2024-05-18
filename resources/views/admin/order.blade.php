@@ -7,13 +7,28 @@
 @section('main-content')
 
     @php
-        $isOrderCompleted = $order->status == 'Completed';
+        $orderStatus = $order->status;
+        $isOrderProcessing = $orderStatus == 'Processing' || $orderStatus == 'Partially Delivered';
+        $badgeType = 'text-bg-';
+        if (!$isOrderProcessing) {
+            switch ($orderStatus) {
+                case 'Completed':
+                    $badgeType .= 'success';
+                    break;
+                case 'Cancelled':
+                    $badgeType .= 'warning';
+                    break;
+                default:
+                    $badgeType .= 'danger';
+                    break;
+            }
+        }
     @endphp
 
     <p class="h4 fw-semibold mt-3 d-flex align-items-center">
         Order ID: {{ $order->id }}
-        @if ($isOrderCompleted)
-            <span class="badge text-bg-success h4 fw-normal ms-4 mb-0">Completed</span>
+        @if (!$isOrderProcessing)
+            <span class="badge {{ $badgeType }} h4 fw-normal ms-4 mb-0">{{ $orderStatus }}</span>
         @endif
     </p>
 
@@ -29,7 +44,7 @@
 
     @if ($order->products != null && sizeof($order->products) > 0)
         {{-- If the Order is not completed then the table will be represented as a form else normal table --}}
-        @if (!$isOrderCompleted)
+        @if ($isOrderProcessing)
             <form action="{{ route('admin.order.approve') }}" method="post">
                 @csrf
         @endif
@@ -42,7 +57,7 @@
                     <th>SKU</th>
                     <th>Requested Quantity</th>
 
-                    @if (!$isOrderCompleted)
+                    @if ($isOrderProcessing)
                         <th>Available Quantity</th>
                         <th>Approved Quantity</th>
                     @else
@@ -57,11 +72,11 @@
                     @php
                         $haveSufficientQty = $product->variation->quantity >= $product->requested_quantity;
 
-                        if (!$isOrderCompleted && $product->requested_quantity != 0) {
+                        if ($isOrderProcessing && $product->requested_quantity != 0) {
                             /**
                              * putting some data to the session for further use in validation
-                             * of form, and 
-                            */
+                             * of form
+                             */
                             $stock_quantities = Session('wh_stock_quantities') ?? [];
                             $stock_names = Session('wh_stock_names') ?? [];
                             $order_product_ids = Session('order_product_ids') ?? [];
@@ -80,13 +95,13 @@
                         <td>{{ $product->variation->product->name }}</td>
                         <td>{{ $product->variation->SKU }}</td>
                         <td>
-                            {{ $isOrderCompleted ? $product->approved_quantity : $product->requested_quantity }}
+                            {{ !$isOrderProcessing ? $product->approved_quantity : $product->requested_quantity }}
 
-                            @if (!$haveSufficientQty && $order->status != 'Completed')
+                            @if (!$haveSufficientQty && $isOrderProcessing)
                                 <span class="badge text-bg-warning fw-normal ms-2">Insufficient Quantity</span>
                             @endif
                         </td>
-                        @if (!$isOrderCompleted)
+                        @if ($isOrderProcessing)
                             <td>
                                 {{ $product->variation->quantity }}
                             </td>
@@ -99,20 +114,43 @@
                                 @endif
                             </td>
                         @else
-                            <td class="text-warning fw-bold">{{ $order->created_at }}</td>
-                            <td class="text-success fw-bold">{{ $order->updated_at }}</td>
+                            <td>{{ $order->created_at }}</td>
+                            <td>{{ $order->updated_at }}</td>
                         @endif
                     </tr>
                 @endforeach
             </tbody>
         </table>
 
-        @if (!$isOrderCompleted)
+        @if ($isOrderProcessing)
             <div class="d-flex justify-content-end gap-2 mt-4">
-                <button class="btn btn-outline-danger">Reject Order</button>
+                <button type="button" id="rejectOrder" class="btn btn-outline-danger">Reject Order</button>
                 <input type="submit" class="btn btn-success" value="Complete Order"></input>
             </div>
             </form>
         @endif
     @endif
+@endsection
+
+
+@section('scripts')
+    <script>
+        $('#rejectOrder').on('click', () => {
+            const data = {
+                orderId: '{{ $order->id }}'
+            };
+            $.ajax({
+                url: "{{ route('admin.order.reject') }}",
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                formData: data,
+                type: JSON,
+                success: function(response) {
+                    window.location.reload();
+                }
+            });
+        });
+    </script>
 @endsection

@@ -40,6 +40,7 @@ class ProductRequest extends FormRequest
             'variation_color' => $this->variation_color ?  array_slice($this->variation_color, 0, $variationNumbers) : null,
             'variation_size' => $this->variation_size ? array_slice($this->variation_size, 0, $variationNumbers) : null,
             'variation_sku' => array_slice($this->variation_sku, 0, $variationNumbers),
+            'variations_count' => $variationNumbers,
         ]);
 
     }
@@ -70,6 +71,7 @@ class ProductRequest extends FormRequest
             'variation_sku.*' => 'required_if:variation_selected.*,on|unique:product_variations,sku',
             'variation_color' => '',
             'variation_size' => '',
+            'variation_count' => '',
         ];
     }
 

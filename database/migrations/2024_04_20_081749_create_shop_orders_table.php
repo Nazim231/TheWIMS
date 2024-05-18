@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('shop_orders', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('shop_id');
-            $table->enum('status', ['Processing', 'Partially Delivered', 'Completed', 'Cancelled'])->default('Processing');
+            $table->enum('status', ['Processing', 'Partially Delivered', 'Completed', 'Cancelled', 'Rejected'])->default('Processing');
             $table->foreign('shop_id')->references('id')->on('shops');
             $table->timestamps();
         });

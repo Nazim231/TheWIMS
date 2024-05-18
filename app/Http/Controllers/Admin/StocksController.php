@@ -17,6 +17,7 @@ use App\Http\Requests\VariationRequest;
  ! selected i.e., if variation 1 & 3 are selected then 
  ! variation_selected array will have array of length 2 (0, 1).
 */
+
 class StocksController extends Controller
 {
     public function showPage()
@@ -27,7 +28,8 @@ class StocksController extends Controller
         return view('admin.stocks', compact('stocks', 'categories', 'brands'));
     }
 
-    public function showProduct($productId) {
+    public function showProduct($productId)
+    {
         $product = Product::with(['variants', 'category', 'brand'])->withSum('variants', 'quantity')->find($productId);
         return view('admin.stock', compact('product'));
     }
@@ -40,21 +42,22 @@ class StocksController extends Controller
 
         // TODO : Generate the SKU for each variations
 
-        $variationsCount = $req->variation_numbers * $req->sub_variation_numbers;
-        $this->addVariationsToDB($newProdId, $variationsCount, $req->validated);
+        $this->addVariationsToDB($newProdId, $prodData);
         return redirect()->back();
     }
 
-    public function addVariations(VariationRequest $req) {
-        // dd($req->all());
+    public function addVariations(VariationRequest $req)
+    {
+
         $variationsCount = $req->variation_numbers * $req->sub_variation_numbers;
-        $this->addVariationsToDB($req->product_id, $variationsCount, $req->validated());
+        $this->addVariationsToDB($req->product_id, $req->validated());
         return redirect()->back();
     }
 
-    private function addVariationsToDB($parentProductId, $variationsCount, $variationsData ) {
-        
-        for ($indexValue = 0; $indexValue < $variationsCount; $indexValue++ ) {
+    private function addVariationsToDB($parentProductId, $variationsData)
+    {
+        for ($indexValue = 0; $indexValue < $variationsData['variations_count']; $indexValue++) {
+
             $variantData = [
                 'product_id' => $parentProductId,
                 'sku' => $variationsData['variation_sku'][$indexValue],

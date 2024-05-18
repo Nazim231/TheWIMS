@@ -71,6 +71,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/order', 'index')->name('order');
             Route::get('/order/{id}', 'showOrder')->name('order.show');
             Route::post('/order', 'approveOrder')->name('order.approve');
+            Route::delete('/order', 'rejectOrder')->name('order.reject');
         });
     });
 

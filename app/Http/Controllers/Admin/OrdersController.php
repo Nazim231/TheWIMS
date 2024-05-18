@@ -48,14 +48,13 @@ class OrdersController extends Controller
             $product->save();
         }
 
-        
         $numOrderProducts = $order_products->count();
         $numApprovedOrderProducts = $order_products->where('requested_quantity', 0)->count();
         // updating order status
         $order = ShopOrder::find($req->order_id);
         $order->status = $numOrderProducts == $numApprovedOrderProducts ? 'Completed' : 'Partially Delivered';
         $order->save();
-        
+
         $variationsToUpdate = array_combine($productVariationIds, $req->approved_quantity);
 
         // decrease warehouse product variation quantities
@@ -70,12 +69,14 @@ class OrdersController extends Controller
             ->whereIn('variation_id', $productVariationIds)
             ->get();
 
+        // updating the already exist stock quantities in shop
         foreach ($existingStocks as $stock) {
             $stock->quantity += $variationsToUpdate[$stock->variation_id];
             $stock->save();
             unset($variationsToUpdate[$stock->variation_id]);
         }
 
+        // adding new stock to the shops
         foreach ($variationsToUpdate as $variationId => $quantity) {
             $stock = new ShopsStock();
             $stock->shop_id = $order->shop_id;
@@ -85,5 +86,17 @@ class OrdersController extends Controller
         }
 
         return redirect()->route('admin.order');
+    }
+
+    public function rejectOrder()
+    {
+        $orderId = session()->get('order_id');
+        if (!$orderId) return redirect()->back();
+
+        $order = ShopOrder::find($orderId);
+        $order->status = 'Rejected';
+        $order->save();
+
+        return response()->json([], 200);
     }
 }
