@@ -92,7 +92,11 @@
                     @endphp
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $product->variation->product->name }}</td>
+                        <td>
+                            <a href="{{ route('admin.stocks.product', $product->variation->product->id) }}">
+                                {{ $product->variation->product->name }}
+                            </a>
+                        </td>
                         <td>{{ $product->variation->SKU }}</td>
                         <td>
                             {{ !$isOrderProcessing ? $product->approved_quantity : $product->requested_quantity }}
