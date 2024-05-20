@@ -6,7 +6,8 @@
 
 @section('main-content')
     {{-- Add shop button --}}
-    <div class="text-end">
+    <div class="mt-3 d-flex align-items-center justify-content-between">
+        <p class="h4 fw-semibold">Shops</p>
         <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#addShopModal">
             Add new shop
         </button>
@@ -53,10 +54,11 @@
     </div>
 
     @if (sizeof($shops) > 0)
-        <table class="table table-striped table-bordered table-hover mt-4">
+        <table class="table table-striped table-bordered table-hover mt-4 cursor-default">
             <thead>
                 <th>ID</th>
                 <th>Name</th>
+                <th>Assigned Employee</th>
                 <th>Address</th>
             </thead>
             <tbody>
@@ -64,6 +66,7 @@
                     <tr>
                         <td>{{ $shop->id }}</td>
                         <td>{{ $shop->name }}</td>
+                        <td>{!! $shop->shopOwner->name ?? '<b>Not Assigned</b>' !!}</td>
                         <td>{{ $shop->address }}</td>
                     </tr>
                 @endforeach

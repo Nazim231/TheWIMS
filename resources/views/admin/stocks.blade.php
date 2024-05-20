@@ -7,7 +7,8 @@
 @vite(['resources/js/stocks.js'])
 
 @section('main-content')
-    <div class="text-end">
+    <div class="d-flex justify-content-between align-items-center mt-3">
+        <p class="h4 fw-semibold">Stocks</p>
         <button class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#addStockModal">
             Add stock
         </button>

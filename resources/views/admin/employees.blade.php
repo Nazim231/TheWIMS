@@ -6,7 +6,8 @@
 
 @section('main-content')
     {{-- Add employee button --}}
-    <div class="text-end">
+    <div class="d-flex justify-content-between align-items-center mt-3">
+        <p class="h4 fw-semibold">Employees</p>
         <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#addEmpModal">Add new
             employee</button>
     </div>
