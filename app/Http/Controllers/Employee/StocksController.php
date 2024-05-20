@@ -22,10 +22,15 @@ class StocksController extends Controller
 
     public function index()
     {
-        $shopId = Shop::with('shopOwner')->limit(1)->get('id')[0]->id;
+        try {
+            $shopId = Shop::where('emp_id', Auth::user()->id)->limit(1)->get()[0]->id;
+        } catch (\Throwable $th) {
+            return redirect()->route('employee.home');
+        }
+        
         //! Below query needs to be refactored using Models
         $shopStocks = DB::select('select p.name as name, sum(ss.quantity) as quantity, count(*) as variations, min(pv.price) as min_price, max(pv.price) as max_price, min(pv.mrp) as min_mrp, max(pv.mrp) as max_mrp from shops_stock AS ss join product_variations AS pv on ss.variation_id = pv.id join products AS p on pv.product_id = p.id where shop_id = ' . $shopId . ' group by pv.product_id');
-        // dd($shopStocks);
+        
         return view('employees.stocks', compact('shopStocks'));
     }
 
@@ -47,7 +52,6 @@ class StocksController extends Controller
         }
 
         $productVariations = ProductVariation::whereIn('product_id', $req->selected_products)->with('product')->get();
-        // return view('employees.select_variations', compact('productVariations'));
         return redirect()->route('employee.stocks.view.variations')->with('productVariations', $productVariations);
     }
 
@@ -80,6 +84,5 @@ class StocksController extends Controller
         } else {
             return abort(402);
         }
-        dd("END");
     }
 }

@@ -41,6 +41,11 @@ Route::controller(AuthController::class)->group(function () {
 
 Route::group(['middleware' => 'auth'], function () {
 
+    /*
+    |-------------------
+    | Admin Routes
+    |-------------------
+    */
     Route::group(['middleware' => 'is_admin', 'prefix' => 'admin/', 'as' => 'admin.'], function () {
 
         Route::view('/', 'admin.home')->name('home');
@@ -75,6 +80,11 @@ Route::group(['middleware' => 'auth'], function () {
         });
     });
 
+    /*
+    |-------------------
+    | Employee Routes
+    |-------------------
+    */
     Route::group(['prefix' => 'employee', 'as' => 'employee.'], function () {
         Route::controller(HomeController::class)->group(function () {
             Route::get('/', 'index')->name('home');
@@ -89,7 +99,8 @@ Route::group(['middleware' => 'auth'], function () {
         });
 
         Route::controller(OrdersController::class)->group(function () {
-            Route::get('/orders', 'index')->name('orders');
+            Route::get('/orders', 'index')->name('order');
+            Route::get('/order/{id}', 'showOrder')->name('order.show');
         });
     });
 });

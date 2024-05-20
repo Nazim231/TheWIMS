@@ -9,11 +9,11 @@
         <p class="display-4 fw-medium m-0">Your Orders</p>
         <hr>
         @if ($orderHistory != null && sizeof($orderHistory) > 0)
-            <table class="table table-striped border">
+            <table class="table table-striped table-bordered table-hover text-center">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Order ID</th>
+                        <th>Order ID</th>   
                         <th>Products Count</th>
                         <th>Order Date</th>
                         <th>Status</th>
@@ -21,8 +21,8 @@
                 </thead>
                 <tbody>
                     @foreach ($orderHistory->all() as $order)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
+                        <tr class="cursor-pointer" onclick="window.location.href = '{{ route('employee.order.show', $order->id) }}'">
+                            <td class="text-muted">{{ $loop->iteration }}</td>
                             <td>{{ $order->id }}</td>
                             <td>{{ $order->products_count . ' Product(s)' }}</td>
                             <td>{{ $order->created_at }}</td>

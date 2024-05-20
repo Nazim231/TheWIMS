@@ -23,8 +23,8 @@
                         class="nav-link p-4 rounded text-white {{ Route::is('employee.home') ? 'active' : '' }}">Home</a>
                     <a href="{{ route('employee.stocks') }}"
                         class="nav-link p-4 rounded text-white {{ Route::is('employee.stocks*') ? 'active' : '' }}">Stocks</a>
-                    <a href="{{ route('employee.orders') }}"
-                        class="nav-link p-4 rounded text-white {{ Route::is('employee.orders*') ? 'active' : '' }}">Orders</a>
+                    <a href="{{ route('employee.order') }}"
+                        class="nav-link p-4 rounded text-white {{ Route::is('employee.order*') ? 'active' : '' }}">Orders</a>
                 </nav>
 
                 <a href="{{ route('auth.logout') }}" class="btn btn-outline-light mt-auto mb-4 p-3">Logout</a>
