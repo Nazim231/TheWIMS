@@ -54,7 +54,7 @@
     </div>
 
     @if (sizeof($shops) > 0)
-        <table class="table table-striped table-bordered table-hover mt-4 cursor-default">
+        <table class="table table-striped table-bordered table-hover mt-4 cursor-default text-center">
             <thead>
                 <th>ID</th>
                 <th>Name</th>
@@ -66,7 +66,7 @@
                     <tr>
                         <td>{{ $shop->id }}</td>
                         <td>{{ $shop->name }}</td>
-                        <td>{!! $shop->shopOwner->name ?? '<b>Not Assigned</b>' !!}</td>
+                        <td>{!! $shop->shopOwner->name ?? '<span class="text-danger fw-semibold">Not Assigned</span>' !!}</td>
                         <td>{{ $shop->address }}</td>
                     </tr>
                 @endforeach

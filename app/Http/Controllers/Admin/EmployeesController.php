@@ -14,7 +14,7 @@ class EmployeesController extends Controller
 {
     public function showPage()
     {
-        $employees = User::all();
+        $employees = User::with('shop')->where('is_admin', 0)->get();
         return view('admin.employees', compact('employees'));
     }
 
@@ -23,7 +23,8 @@ class EmployeesController extends Controller
 
         $validator = Validator::make($req->all(), [
             'email' => 'required | email | unique:users',
-            'name' => 'required | min:3'
+            'name' => 'required | min:3',
+            'city' => 'required | min:3',
         ]);
 
         if ($validator->fails()) {
@@ -35,7 +36,8 @@ class EmployeesController extends Controller
         $userData = [
             'email' => $req->email,
             'password' => Hash::make($generatedPassword),
-            'name' => $req->name
+            'name' => $req->name,
+            'city' => $req->city,
         ];
 
         $createdUser = User::create($userData);

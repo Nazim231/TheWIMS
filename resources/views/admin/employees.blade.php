@@ -57,6 +57,11 @@
                             <input type="text" name="email" id="email" class="form-control mt-2"
                                 value="{{ old('email') }}">
                         </div>
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" name="city" id="city" class="form-control mt-2"
+                                value="{{ old('city') }}">
+                        </div>
                         <div class="text-end">
                             <button class="btn btn-outline" type="button" data-bs-dismiss="modal">Close</button>
                             <input type="submit" value="Add Employee" class="btn btn-dark">
@@ -68,11 +73,13 @@
     </div>
 
     @if (sizeof($employees) > 0)
-        <table class="table table-striped table-bordered table-hover mt-4">
+        <table class="table table-striped table-bordered table-hover text-center mt-4">
             <thead>
                 <th>ID</th>
                 <th>Name</th>
                 <th>Email</th>
+                <th>City</th>
+                <th>Shop</th>
                 <th>Created At</th>
             </thead>
             <tbody class="text-muted">
@@ -81,6 +88,8 @@
                         <td>{{ $employee->id }}</td>
                         <td>{{ $employee->name }}</td>
                         <td>{{ $employee->email }}</td>
+                        <td>{{ $employee->city }}</td>
+                        <td>{!! $employee->shop->name ?? '<span class="text-danger fw-semibold">Not Assigned</span>' !!}</td>
                         <td>{{ $employee->created_at }}</td>
                     </tr>
                 @endforeach
