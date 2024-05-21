@@ -58,6 +58,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::controller(AdminManageEmployees::class)->group(function () {
             Route::get('/employees', 'showPage')->name('employees');
             Route::post('/employee', 'addEmployee')->name('employees.add');
+            Route::get('/employee/unassigned', 'getUnAssignedUsers')->name('employees.unassigned');
         });
         // Category Routes
         Route::controller(AdminManageCategories::class)->group(function () {

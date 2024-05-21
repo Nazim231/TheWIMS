@@ -4,6 +4,8 @@
     Shops
 @endsection
 
+@vite('resources/js/shops.js')
+
 @section('main-content')
     {{-- Add shop button --}}
     <div class="mt-3 d-flex align-items-center justify-content-between">
@@ -42,7 +44,17 @@
                                 <p class="text-danger">{{ $message }}</p>
                             @enderror
                         </div>
-                        <div class="text-end">
+                        <div class="form-group">
+                            <label for="employee">Select Employee</label>
+                            <select name="employee" id="employee" class="form-select mt-2"
+                                data-id="{{ route('admin.employees.unassigned') }}">
+                                <option value="" selected disabled>Please choose an employee</option>
+                            </select>
+                            @error('emp_id')
+                                <p class="text-danger">{{ $emp_id }}</p>
+                            @enderror
+                        </div>
+                        <div class="text-end mt-2">
                             <button type="button" class="btn btn-outline" data-bs-dismiss="modal">Close</button>
                             <input type="submit" value="Add Shop" class="btn btn-dark">
                         </div>

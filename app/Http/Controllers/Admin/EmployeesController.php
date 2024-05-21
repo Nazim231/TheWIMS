@@ -61,4 +61,10 @@ class EmployeesController extends Controller
             ]
         );
     }
+
+    public function getUnAssignedUsers()
+    {
+        $unassignedEmployees = User::select('id', 'name')->whereDoesntHave('shop')->where('is_admin', 0)->get();
+        return response()->json(['employees' => $unassignedEmployees]);
+    }
 }
