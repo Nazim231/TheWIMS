@@ -75,7 +75,7 @@
             </thead>
             <tbody>
                 @foreach ($shops as $shop)
-                    <tr>
+                    <tr onclick="window.location.href = '{{ route('admin.shops.show', $shop->id) }}'">
                         <td>{{ $shop->id }}</td>
                         <td>{{ $shop->name }}</td>
                         <td>{!! $shop->shopOwner->name ?? '<span class="text-danger fw-semibold">Not Assigned</span>' !!}</td>

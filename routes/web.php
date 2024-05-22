@@ -52,6 +52,7 @@ Route::group(['middleware' => 'auth'], function () {
         // Shop Routes
         Route::controller(AdminManageShops::class)->group(function () {
             Route::get('/shops', 'showPage')->name('shops');
+            Route::get('/shop/{id}', 'showShop')->name('shops.show');
             Route::post('/shop', 'addShop')->name('shops.add');
         });
         // Employee Routes

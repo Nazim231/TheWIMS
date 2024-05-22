@@ -18,4 +18,8 @@ class Shop extends Model
     {
         return $this->belongsTo(User::class, 'emp_id', 'id');
     }
+
+    public function stock() {
+        return $this->hasMany(ShopsStock::class);
+    }
 }
