@@ -65,9 +65,10 @@
             <a href="#">View more</a>
         </div>
         @if (sizeof($shopOrders) > 0)
-            <table class="table table-striped table-hover table-bordered cursor-default text-center mt-2">
-                <thead>
+            <table class="table table-striped table-hover table-bordered cursor-pointer text-center mt-2">
+                <thead class="cursor-default">
                     <th>#</th>
+                    <th>Order ID</th>
                     <th>No. of Products</th>
                     <th>Order Date</th>
                     <th>Completion Date</th>
@@ -75,8 +76,9 @@
                 </thead>
                 <tbody>
                     @foreach ($shopOrders as $order)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
+                        <tr onclick="window.location.href = '{{ route('admin.order.show', $order->id) }}'">
+                            <td class="text-secondary" >{{ $loop->iteration }}</td>
+                            <td>{{ $order->id }}</td>
                             <td>{{ $order->products_count }}</td>
                             <td>{{ $order->created_at }}</td>
                             <td>{!! $order->status != 'Processing' ? $order->updated_at : '<span class="fw-light">No updates</span>' !!}</td>

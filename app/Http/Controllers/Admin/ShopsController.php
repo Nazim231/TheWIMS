@@ -42,8 +42,13 @@ class ShopsController extends Controller
                     WHERE s.id = ' . $id . ' GROUP BY pv.product_id'
         );
 
+        if (sizeof($products) == 0) {
+            // shop doesn't exist or invalid shop id
+            return Redirect::route('admin.shops');
+        }
+
         $shopOrders = ShopOrder::where('shop_id', $id)->withCount('products')->orderBy('id', 'desc')->limit(5)->get();
-        
+
         $shop = (object) [
             'id' => $products[0]->id,
             'name' => $products[0]->name,
