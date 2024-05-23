@@ -9,6 +9,7 @@ use App\Models\ProductVariation;
 use Illuminate\Routing\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Http\Requests\VariationRequest;
+use Illuminate\Support\Facades\Redirect;
 
 /*
  ! PROBLEM :: problem in selecting variations to add
@@ -31,6 +32,9 @@ class StocksController extends Controller
     public function showProduct($productId)
     {
         $product = Product::with(['variants', 'category', 'brand'])->withSum('variants', 'quantity')->find($productId);
+        if (!$product) {
+            return Redirect::route('admin.stocks');
+        }
         return view('admin.stock', compact('product'));
     }
 

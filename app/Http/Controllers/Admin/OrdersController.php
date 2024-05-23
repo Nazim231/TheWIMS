@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\ShopOrder;
+use App\Models\ShopsStock;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
-use App\Http\Requests\ApproveShopOrderRequest;
 use App\Models\ProductVariation;
 use App\Models\ShopOrderProduct;
-use App\Models\ShopsStock;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Redirect;
+use App\Http\Requests\ApproveShopOrderRequest;
 
 class OrdersController extends Controller
 {
@@ -21,7 +22,12 @@ class OrdersController extends Controller
 
     public function showOrder(Request $req, $id)
     {
-        $order = ShopOrder::where('id', $id)->with('products', 'products.variation.product')->get()[0];
+        $order = ShopOrder::where('id', $id)->with('products', 'products.variation.product')->get()[0] ?? null;
+
+        if (!$order) {
+            return Redirect::route('admin.order');
+        }
+        
         $req->session()->put('order_id', $id);
 
         /** 

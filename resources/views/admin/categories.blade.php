@@ -62,11 +62,13 @@
             <thead>
                 <th>ID</th>
                 <th>Name</th>
+                <th>No. of Products</th>
             </thead>
             @foreach ($categories as $category)
                 <tr>
                     <td>{{ $category->id }}</td>
                     <td>{{ $category->name }}</td>
+                    <td>{{ $category->products_count }}</td>
                 </tr>
             @endforeach
         </table>

@@ -10,7 +10,7 @@ use Illuminate\Routing\Controller;
 class CategoriesController extends Controller
 {
     public function showPage() {
-        $categories = Category::all();
+        $categories = Category::withCount('products')->get();
         return view('admin.categories', compact('categories'));
     }
 
