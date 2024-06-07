@@ -22,13 +22,28 @@ class OrdersController extends Controller
 
     public function showOrder(Request $req, $id)
     {
-        $order = ShopOrder::where('id', $id)->with('products', 'products.variation.product')->get()[0] ?? null;
+        $order = ShopOrder::where('id', $id)
+            ->with('products', 'shop', 'products.variation.product')
+            ->withSum('products as requested_items', 'requested_quantity')
+            ->withSum('products as approved_items', 'approved_quantity')
+            ->get()[0] ?? null;
 
         if (!$order) {
             return Redirect::route('admin.order');
         }
-        
+
         $req->session()->put('order_id', $id);
+
+        $order->total_cost = 0;
+        $order->est_revenue = 0;
+
+        foreach($order->products as $product) {
+            $qty = $product->approved_quantity + $product->requested_quantity;
+            
+            $order->total_cost += $qty * $product->variation->cost_price;
+            $order->est_revenue += $qty * $product->variation->price;
+        }
+
 
         /** 
          * 'wh_stock_quantities', 'wh_stock_names' will store the variations quantities

@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Znck\Eloquent\Traits\BelongsToThrough;
 
 class ShopOrder extends Model
 {
-    use HasFactory;
+    use HasFactory, BelongsToThrough;
 
     protected $fillable = [
         'shop_id',

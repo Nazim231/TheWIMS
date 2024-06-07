@@ -25,12 +25,33 @@
         }
     @endphp
 
-    <p class="h4 fw-semibold mt-3 d-flex align-items-center">
-        Order ID: {{ $order->id }}
-        @if (!$isOrderProcessing)
-            <span class="badge {{ $badgeType }} h4 fw-normal ms-4 mb-0">{{ $orderStatus }}</span>
-        @endif
-    </p>
+    <p class="h4 fw-semibold mt-3 d-flex align-items-center">Order Details</p>
+    <hr>
+
+    <div class="row my-4">
+        <div class="col">
+            <p>Order ID : <span class="fw-semibold">{{ $order->id }}</span></p>
+            <p>Shop : <span class="fw-semibold">{{ $order->shop->name }}</span></p>
+            <p>Order date : <span class="fw-semibold">{{ $order->created_at }}</span></p>
+            <p>Last update : <span class="fw-semibold">{{ $order->updated_at }}</span></p>
+        </div>
+        <div class="col">
+            <p class="d-flex align-items-center">Status :
+                <span class="badge {{ $badgeType }} ms-2 ">{{ $orderStatus }}</span>
+            </p>
+            <p>Total Items :
+                <span class="fw-semibold">{{ $order->requested_items + $order->approved_items }}</span>
+            </p>
+            <p>Total Cost price :
+                <span class="fw-semibold" id="totalCost">{{ $order->total_cost }}</span>
+            </p>
+            <p>Est. Revenue :
+                <span class="fw-semibold" id="estRevenue">{{ $order->est_revenue }}
+                    <span class="text-success">({{ ($order->total_cost/$order->est_revenue)*100 }}% Profit)</span>
+                </span>
+            </p>
+        </div>
+    </div>
 
     @if ($errors->any())
         <div class="alert alert-danger mt-3 pt-2 pb-0">
@@ -64,6 +85,8 @@
                         <th>Order Date</th>
                         <th>Completion Date</th>
                     @endif
+
+                    <th>Cost Price</th>
                 </tr>
             </thead>
 
@@ -121,8 +144,10 @@
                             <td>{{ $order->created_at }}</td>
                             <td>{{ $order->updated_at }}</td>
                         @endif
+                        <td>{{ $product->variation->cost_price * $product->variation->quantity }}</td>
                     </tr>
                 @endforeach
+
             </tbody>
         </table>
 
