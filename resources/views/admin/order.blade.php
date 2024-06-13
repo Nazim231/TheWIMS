@@ -47,7 +47,9 @@
             </p>
             <p>Est. Revenue :
                 <span class="fw-semibold" id="estRevenue">{{ $order->est_revenue }}
-                    <span class="text-success">({{ (($order->est_revenue - $order->total_cost) / $order->est_revenue) * 100 }}% Profit)</span>
+                    <span
+                        class="text-success">({{ (($order->est_revenue - $order->total_cost) / $order->est_revenue) * 100 }}%
+                        Profit)</span>
                 </span>
             </p>
         </div>
@@ -96,18 +98,18 @@
             <tbody>
                 @foreach ($order->products as $product)
                     @php
-                        $haveSufficientQty = $product->variation->quantity >= $product->requested_quantity;
+                        $whAvailableQty = $product->variation->quantity;
+                        $haveSufficientQty = $whAvailableQty >= $product->requested_quantity;
 
                         if ($isOrderProcessing && $product->requested_quantity != 0) {
                             /**
-                             * putting some data to the session for further use in validation
-                             * of form
+                             * putting some data to the session for further use in form validation
                              */
                             $stock_quantities = Session('wh_stock_quantities') ?? [];
                             $stock_names = Session('wh_stock_names') ?? [];
                             $order_product_ids = Session('order_product_ids') ?? [];
 
-                            $stock_quantities[] = $product->variation->quantity;
+                            $stock_quantities[] = $whAvailableQty;
                             $stock_names[] = $product->variation->product->name;
                             $order_product_ids[] = $product->id;
 
@@ -129,17 +131,15 @@
                             </a>
                         </td>
                         <td>{{ $product->variation->SKU }}</td>
-                        <td>{{ $product->requested_quantity }}</td>
-                        <td>
-                            {{ $product->approved_quantity }}
-
-                            @if (!$haveSufficientQty && $isOrderProcessing)
-                                <span class="badge text-bg-warning fw-normal ms-2">Insufficient Quantity</span>
-                            @endif
-                        </td>
+                        <td>{{ $product->requested_quantity + $product->approved_quantity }}</td>
+                        <td> {{ $product->approved_quantity }} </td>
                         @if ($isOrderProcessing)
                             <td>
                                 {{ $product->variation->quantity }}
+
+                                @if (!$haveSufficientQty && $isOrderProcessing)
+                                    <span class="badge text-bg-warning fw-normal ms-2">Insufficient Quantity</span>
+                                @endif
                             </td>
                             <td>
                                 @if ($product->requested_quantity == 0)
