@@ -42,10 +42,6 @@ class AuthController extends Controller
     }
 
     private function showPageIfNotAuthenticated($view) {
-        if (Auth::check()) {
-            return redirect()->back();
-        } else {
-            return view($view);
-        }
+        return Auth::check() ? redirect()->back() : view($view);
     }
 }

@@ -142,6 +142,7 @@
                     <th>Quantity</th>
                     <th>MRP</th>
                     <th>Price</th>
+                    <th>Cost Price</th>
                     <th>Size</th>
                     <th>Color</th>
                     <th>Height</th>
@@ -159,6 +160,7 @@
                         <td>{{ $variation->quantity }}</td>
                         <td>{{ $variation->MRP }}</td>
                         <td>{{ $variation->price }}</td>
+                        <td>{{ $variation->cost_price }}</td>
                         <td>{{ $variation->size ?? '--' }}</td>
                         <td>{{ $variation->color ?? '--' }}</td>
                         <td>{{ $variation->height ?? '--' }}</td>

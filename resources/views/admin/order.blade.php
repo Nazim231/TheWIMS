@@ -47,7 +47,7 @@
             </p>
             <p>Est. Revenue :
                 <span class="fw-semibold" id="estRevenue">{{ $order->est_revenue }}
-                    <span class="text-success">({{ ($order->total_cost/$order->est_revenue)*100 }}% Profit)</span>
+                    <span class="text-success">({{ (($order->est_revenue - $order->total_cost) / $order->est_revenue) * 100 }}% Profit)</span>
                 </span>
             </p>
         </div>
@@ -77,16 +77,19 @@
                     <th>Product</th>
                     <th>SKU</th>
                     <th>Requested Quantity</th>
+                    <th>Approved Quantity</th>
 
                     @if ($isOrderProcessing)
                         <th>Available Quantity</th>
-                        <th>Approved Quantity</th>
+                        <th>Qty. To Approve</th>
                     @else
                         <th>Order Date</th>
                         <th>Completion Date</th>
                     @endif
 
                     <th>Cost Price</th>
+                    <th>Revenue</th>
+                    <th>Profit</th>
                 </tr>
             </thead>
 
@@ -112,6 +115,11 @@
                             session()->put('wh_stock_names', $stock_names);
                             session()->put('order_product_ids', $order_product_ids);
                         }
+
+                        $qty = $product->requested_quantity + $product->approved_quantity;
+                        $cost_price = $product->variation->cost_price * $qty;
+                        $revenue = $product->variation->price * $qty;
+                        $profit = ($product->variation->price - $product->variation->cost_price) * $qty;
                     @endphp
                     <tr>
                         <td>{{ $loop->iteration }}</td>
@@ -121,8 +129,9 @@
                             </a>
                         </td>
                         <td>{{ $product->variation->SKU }}</td>
+                        <td>{{ $product->requested_quantity }}</td>
                         <td>
-                            {{ !$isOrderProcessing ? $product->approved_quantity : $product->requested_quantity }}
+                            {{ $product->approved_quantity }}
 
                             @if (!$haveSufficientQty && $isOrderProcessing)
                                 <span class="badge text-bg-warning fw-normal ms-2">Insufficient Quantity</span>
@@ -144,7 +153,9 @@
                             <td>{{ $order->created_at }}</td>
                             <td>{{ $order->updated_at }}</td>
                         @endif
-                        <td>{{ $product->variation->cost_price * $product->variation->quantity }}</td>
+                        <td> {{ $cost_price }} </td>
+                        <td> {{ $revenue }}</td>
+                        <td> {{ $profit }} </td>
                     </tr>
                 @endforeach
 
