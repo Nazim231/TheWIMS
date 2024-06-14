@@ -54,6 +54,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/shops', 'showPage')->name('shops');
             Route::get('/shop/{id}', 'showShop')->name('shops.show');
             Route::post('/shop', 'addShop')->name('shops.add');
+            Route::post('/shop/assignemp', 'assignEmpToShop')->name('shops.assign_emp');
         });
         // Employee Routes
         Route::controller(AdminManageEmployees::class)->group(function () {

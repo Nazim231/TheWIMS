@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\AssignEmployeeRequest;
 use App\Models\Shop;
-use App\Http\Requests\ShopRequest;
+use App\Models\User;
 use App\Models\ShopOrder;
+use Illuminate\Http\Request;
+use App\Http\Requests\ShopRequest;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 
 class ShopsController extends Controller
 {
@@ -58,5 +62,14 @@ class ShopsController extends Controller
         ];
 
         return view('admin.shop', compact('shop', 'shopOrders'));
+    }
+
+    public function assignEmpToShop(AssignEmployeeRequest $req)
+    {
+        $shop = Shop::find($req->shop);
+        $shop->emp_id = $req->employee;
+        $shop->save();
+
+        return back();
     }
 }

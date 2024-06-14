@@ -11,7 +11,8 @@ class Shop extends Model
 
     protected $fillable = [
         'name',
-        'address'
+        'address',
+        'emp_id',
     ];
 
     public function shopOwner()

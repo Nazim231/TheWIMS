@@ -4,6 +4,8 @@
     Shop - {{ $shop->name . ' (' . $shop->id . ')' }}
 @endsection
 
+@vite(['resources/js/shops.js'])
+
 @section('main-content')
     <p class="h4 fw-semibold mt-3">Shop Details</p>
     <hr>
@@ -18,7 +20,48 @@
             <span class="fw-semibold">Shop Address: </span> &nbsp; {{ $shop->address }}
         </p>
         <p>
-            <span class="fw-semibold">Shop Employee: </span> &nbsp; {!! $shop->emp_name ?? '<b class="text-danger">Not Assigned</b>' !!}
+            <span class="fw-semibold">Shop Employee: </span> &nbsp;
+            @if ($shop->emp_name)
+                {{ $shop->emp_name }}
+            @else
+                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#assignEmpModal">Assign Employee</button>
+                {{-- Assign employee modal --}}
+                <div class="modal fade" id="assignEmpModal" tabindex="-1" aria-labelledby="assignEmpModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="assignEmpModalLabel">Assign Employee</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <form action="{{ route('admin.shops.assign_emp') }}" method="POST">
+                                <div class="modal-body">
+                                    @csrf
+                                    <input type="hidden" name="shop" value="{{$shop->id}}">
+                                    <div class="form-group">
+                                        <label for="employee">Select Employee</label>
+                                        <select name="employee" id="employee" class="form-select mt-2"
+                                            data-id="{{ route('admin.employees.unassigned') }}">
+                                            <option value="0" selected disabled>Please choose an employee</option>
+                                        </select>
+                                        @if ($errors->any())
+                                            @foreach ($errors->all() as $error)
+                                                <p class="text-danger mt-2">{{ $error }}</p>
+                                            @endforeach
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline" data-bs-dismiss="modal">Close</button>
+                                    <input type="submit" value="Assign Employee" class="btn btn-dark">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            @endif
         </p>
     </div>
     <hr>
@@ -77,7 +120,7 @@
                 <tbody>
                     @foreach ($shopOrders as $order)
                         <tr onclick="window.location.href = '{{ route('admin.order.show', $order->id) }}'">
-                            <td class="text-secondary" >{{ $loop->iteration }}</td>
+                            <td class="text-secondary">{{ $loop->iteration }}</td>
                             <td>{{ $order->id }}</td>
                             <td>{{ $order->products_count }}</td>
                             <td>{{ $order->created_at }}</td>

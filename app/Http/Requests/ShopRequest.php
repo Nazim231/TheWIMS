@@ -2,13 +2,14 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ShopRequest extends FormRequest
 {
     private $rules = [
         'name' => 'required',
-        'address' => 'required'
+        'address' => 'required',
     ];
 
     /**
@@ -16,7 +17,7 @@ class ShopRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return Auth::user()->is_admin;
     }
 
     protected function prepareForValidation()
