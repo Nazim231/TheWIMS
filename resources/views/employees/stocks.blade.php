@@ -3,7 +3,7 @@
 @section('breadcrumb')
     Stocks
 @endsection
-
+@vite(['resources/css/app.css'])
 @section('main-content')
     <div class="p-1">
         <div class="d-flex align-items-center">
@@ -14,9 +14,9 @@
         </div>
         <hr>
         @if (Session::get('order_placed'))
-        <div class="alert alert-success">
-            {{ Session::get('order_placed') }}
-        </div>
+            <div class="alert alert-success">
+                {{ Session::get('order_placed') }}
+            </div>
         @endif
 
         @if ($shopStocks != null && sizeof($shopStocks) > 0)
@@ -26,16 +26,18 @@
                         <th>#</th>
                         <th>Product</th>
                         <th>Quantity</th>
+                        <th>Variations</th>
                         <th>Price</th>
                         <th>MRP</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($shopStocks as $stock)
-                        <tr>
+                        <tr onclick="window.location.href = '{{ route('employee.stocks.show', $stock->id) }}'" class="cursor-pointer">
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $stock->name }}</td>
                             <td>{{ $stock->quantity }}</td>
+                            <td>{{ $stock->variations }}</td>
                             <td>{{ $stock->min_price . ' to ' . $stock->max_price }}</td>
                             <td>{{ $stock->min_mrp . ' to ' . $stock->max_mrp }}</td>
                         </tr>

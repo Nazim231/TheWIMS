@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\PlaceShopStockOrder;
 use App\Models\ShopOrder;
 use App\Models\ShopOrderProduct;
+use Exception;
 
 class StocksController extends Controller
 {
@@ -27,11 +28,33 @@ class StocksController extends Controller
         } catch (\Throwable $th) {
             return redirect()->route('employee.home');
         }
-        
+
         //! Below query needs to be refactored using Models
-        $shopStocks = DB::select('select p.name as name, sum(ss.quantity) as quantity, count(*) as variations, min(pv.price) as min_price, max(pv.price) as max_price, min(pv.mrp) as min_mrp, max(pv.mrp) as max_mrp from shops_stock AS ss join product_variations AS pv on ss.variation_id = pv.id join products AS p on pv.product_id = p.id where shop_id = ' . $shopId . ' group by pv.product_id');
-        
+        $shopStocks = DB::select('select pv.product_id as id, p.name as name, sum(ss.quantity) as quantity, count(*) as variations, min(pv.price) as min_price, max(pv.price) as max_price, min(pv.mrp) as min_mrp, max(pv.mrp) as max_mrp from shops_stock AS ss join product_variations AS pv on ss.variation_id = pv.id join products AS p on pv.product_id = p.id where shop_id = ' . $shopId . ' group by pv.product_id');
+
         return view('employees.stocks', compact('shopStocks'));
+    }
+
+    public function viewProduct(Request $req, $id)
+    {
+        if (!is_numeric($id)) {
+            return redirect()->route('employee.stocks');
+        }
+
+        $shopId = Shop::where('emp_id', Auth::user()->id)->limit(1)->get()[0]->id;
+
+        $variationDetails = DB::select(
+            'SELECT ss.*, pv.sku, pv.product_id, p.name
+            FROM shops_stock AS ss
+            JOIN product_variations AS pv ON ss.variation_id = pv.id
+            JOIN products AS p ON product_id = p.id
+            WHERE ss.shop_id = ' . $shopId . ' AND product_id = ' . $id
+        );
+        $productData = (object) [
+            'name' => $variationDetails[0]->name,
+            'variations' => $variationDetails
+        ];
+        return view('employees.stock', compact('productData'));
     }
 
     public function addStockToShopPage()

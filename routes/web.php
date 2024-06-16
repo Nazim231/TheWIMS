@@ -95,6 +95,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::controller(StocksController::class)->group(function () {
             Route::get('/stocks', 'index')->name('stocks');
+            Route::get('/stocks/{id}', 'viewProduct')->name('stocks.show');
             Route::get('/add-stocks', 'addStockToShopPage')->name('products.request.page');
             Route::post('/select-variations', 'getSelectedProductVariations')->name('stocks.request.variations');
             Route::get('/select-variations', 'viewProductVariations')->name('stocks.view.variations');
