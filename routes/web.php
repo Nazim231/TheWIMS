@@ -3,14 +3,15 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Employee\HomeController;
-use App\Http\Controllers\Employee\StocksController;
 use App\Http\Controllers\Admin\ShopsController as AdminManageShops;
 use App\Http\Controllers\Admin\StocksController as AdminManageStocks;
 use App\Http\Controllers\Admin\EmployeesController as AdminManageEmployees;
 use App\Http\Controllers\Admin\CategoriesController as AdminManageCategories;
 use App\Http\Controllers\Admin\OrdersController as AdminManageOrders;
+use App\Http\Controllers\Employee\HomeController;
+use App\Http\Controllers\Employee\StocksController;
 use App\Http\Controllers\Employee\OrdersController;
+use App\Http\Controllers\Employee\MakeSellController;
 
 /*
 |--------------------------------------------------------------------------
@@ -105,6 +106,12 @@ Route::group(['middleware' => 'auth'], function () {
         Route::controller(OrdersController::class)->group(function () {
             Route::get('/orders', 'index')->name('order');
             Route::get('/order/{id}', 'showOrder')->name('order.show');
+        });
+
+        Route::controller(MakeSellController::class)->group(function () {
+            Route::get('/sell', 'index')->name('sell');
+            Route::get('/sell/search_sku', 'searchSKUinShop')->name('sell.product.search');
+            Route::post('/sell/checkout', 'checkoutCart')->name('sell.checkout');
         });
     });
 });

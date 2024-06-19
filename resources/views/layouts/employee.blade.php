@@ -21,6 +21,9 @@
                 <nav class="nav flex-column gap-4">
                     <a href="{{ route('employee.home') }}"
                         class="nav-link p-4 rounded text-white {{ Route::is('employee.home') ? 'active' : '' }}">Home</a>
+                    <a href="{{ route('employee.sell') }}"
+                        class="nav-link p-4 rounded text-white {{ Route::is('employee.sell*') ? 'active' : '' }}">Make a
+                        Sell</a>
                     <a href="{{ route('employee.stocks') }}"
                         class="nav-link p-4 rounded text-white {{ Route::is('employee.stocks*') ? 'active' : '' }}">Stocks</a>
                     <a href="{{ route('employee.order') }}"
@@ -38,5 +41,7 @@
     </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+@yield('scripts')
 
 </html>

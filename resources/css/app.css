@@ -15,3 +15,62 @@ body {
 .cursor-default {
     cursor: default;
 }
+
+.search-box {
+    position: relative;
+}
+
+.search-box > input:focus {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    box-shadow: none !important;
+    transition: ease-out 0.3s;
+}
+
+.searched-item {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    overflow: scroll;
+    overflow-x: hidden;
+    max-height: 250px;
+    border: 1px solid #86b7fe;
+    border-top: 0;
+    background-color: white !important;
+    visibility: hidden;
+}
+
+.searched-item::-webkit-scrollbar {
+    width: 0.4rem;
+}
+
+.searched-item::-webkit-scrollbar-thumb {
+    border-radius: 50px;
+    background: rgba(139, 139, 139, 0.6);
+}
+
+.searched-item::-webkit-scrollbar-thumb:hover {
+    background: rgb(139, 139, 139);
+}
+
+.searched-item > div {
+    padding: 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid rgb(201, 201, 201);
+}
+
+.searched-item > div:last-child {
+    border-bottom: none;
+}
+
+.searched-item > div:hover {
+    background-color: beige;
+}
+
+.checkout-bottom-bar {
+    bottom: 0;
+    position: absolute;
+    width: -webkit-fill-available;
+    border-top: 1px solid rgb(201, 201, 201);
+    margin-inline-end: 1rem;
+}
