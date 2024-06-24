@@ -1,6 +1,7 @@
 const searchField = document.getElementById("search_text");
 const searchedResult = document.getElementById("searched-item");
 const btnCheckout = document.getElementById("btnCheckout");
+const btnFinalizeCheckout = document.getElementById("btnFinalizeCheckout");
 
 const cartItems = new Map();
 let totalCartCost = 0;
@@ -30,29 +31,66 @@ searchField.addEventListener("keyup", (e) => {
     }
 });
 
-btnCheckout.addEventListener("click", function (e) {
+btnCheckout.addEventListener("click", () => {
+    $("#confirm-selected-items").empty();
+
+    let i = 0;
+    let totalQty = 0;
+    let totalAmt = 0;
+    cartItems.forEach((value) => {
+        const itemRow = `
+            <tr>
+                <td>${++i}</td>
+                <td>${value.name}</td>
+                <td>${value.quantity}</td>
+                <td>${value.totalPrice}</td>
+            </tr>
+        `;
+        $("#confirm-selected-items").append(itemRow);
+        totalQty += value.quantity;
+        totalAmt += value.totalPrice;
+    });
+
+    $("#total-items").text(i);
+    $("#total-qty").text(totalQty);
+    $("#total-amount").text(totalAmt);
+
+    const checkoutModalInstance = new bootstrap.Modal(
+        document.getElementById("confirmCheckoutDialog")
+    );
+    const checkoutModal = document.getElementById("confirmCheckoutDialog");
+    checkoutModalInstance.show(checkoutModal);
+});
+
+btnFinalizeCheckout.addEventListener("click", function (e) {
     const url = this.dataset.url;
     const token = this.dataset.ref;
 
     const finalizeData = {};
     let i = 0;
-    cartItems.forEach((value, key) => {
-        finalizeData[i++] = value;
-    });
+    cartItems.forEach((value) => (finalizeData[i++] = value));
 
     $.ajax({
         url: url,
-        type: 'POST',
+        type: "POST",
         data: {
             _token: token,
             data: finalizeData,
         },
         success: function (response) {
-            console.log(response);
-        }
-    })
+            cartItems.clear();
+            $("#selected-items").empty();
+            $("#confirm-selected-items").empty();
+            console.log(response, cartItems.size());
+        },
+    });
 });
 
+/**
+ * Creates selectable searched product element
+ *
+ * @param {Object} result product received while searching
+ */
 function createSearchedItemElem(result) {
     const container = document.createElement("div");
     const prodName = document.createElement("h5");
@@ -70,6 +108,13 @@ function createSearchedItemElem(result) {
     searchedResult.style.visibility = "visible";
 }
 
+/**
+ * Add product to the cartItems map
+ * and creates new row of item in cart table.
+ *
+ * @param {Object} data Object containing details of product.
+ *
+ */
 function addItemToCart(data) {
     if (cartItems.get(data.id)) {
         updateItemQuantity(data.id);
@@ -77,44 +122,26 @@ function addItemToCart(data) {
         return;
     }
 
-    const row = document.createElement("tr");
-    const col = document.createElement("td");
-    const colId = document.createElement("td");
-    const colName = document.createElement("td");
-    const colSKU = document.createElement("td");
-    const colQty = document.createElement("td");
-    const colPrice = document.createElement("td");
-    const colTotalPrice = document.createElement("td");
-
     const itemPositionInUI = cartItems.size;
 
-    col.textContent = itemPositionInUI + 1;
-    row.appendChild(col);
-
-    colId.textContent = data.id;
-    row.appendChild(colId);
-
-    colName.textContent = data.name;
-    row.appendChild(colName);
-
-    colSKU.textContent = data.SKU;
-    row.appendChild(colSKU);
-
-    colQty.textContent = 1;
-    row.appendChild(colQty);
-
-    colPrice.textContent = data.price;
-    row.appendChild(colPrice);
-
-    colTotalPrice.textContent = data.price;
-    row.appendChild(colTotalPrice);
+    const rowCode = `
+        <tr>
+            <td>${itemPositionInUI + 1}</td>
+            <td>${data.id}</td>
+            <td>${data.name}</td>
+            <td>${data.SKU}</td>
+            <td>${1}</td>
+            <td>${data.price}</td>
+            <td>${data.price}</td>
+        </tr>
+    `;
 
     data.position = itemPositionInUI;
     data.quantity = 1;
     data.totalPrice = data.price;
     cartItems.set(data.id, data);
 
-    $("#selected-items").append(row);
+    $("#selected-items").append(rowCode);
     totalCartCost += data.price;
     $("#checkout-total-cost").text(totalCartCost);
     clearAndHideSearchedItems();
@@ -126,6 +153,11 @@ function clearAndHideSearchedItems() {
     searchedResult.style.visibility = "hidden";
 }
 
+/**
+ * Update item quantity in cart, and also in table.
+ *
+ * @param {Number} itemId
+ */
 function updateItemQuantity(itemId) {
     const cartProduct = cartItems.get(itemId);
 
@@ -146,7 +178,7 @@ function updateItemQuantity(itemId) {
         .children()
         .eq(cartProduct.position)
         .children()
-        .eq(6)  // 5 is the total price column index
+        .eq(6) // 5 is the total price column index
         .html(cartProduct.totalPrice);
 
     // updating overall total cost
@@ -156,6 +188,13 @@ function updateItemQuantity(itemId) {
 }
 
 function setSearchFieldFocused() {
-    $("#search_text").val('');
+    $("#search_text").val("");
     $("#search_text").focus();
 }
+
+document.addEventListener("click", () => {
+    /**
+     *  TODO : If there are items in cart
+     * & user is changing the page, show a confirm dialog for Discarding Cart.
+     */
+});
