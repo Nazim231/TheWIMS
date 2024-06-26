@@ -67,8 +67,7 @@ btnFinalizeCheckout.addEventListener("click", function (e) {
     const token = this.dataset.ref;
 
     const finalizeData = {};
-    let i = 0;
-    cartItems.forEach((value) => (finalizeData[i++] = value));
+    cartItems.forEach((value) => (finalizeData[value.id] = value));
 
     $.ajax({
         url: url,

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Employee;
 
+use App\Http\Requests\CheckoutRequest;
 use App\Models\Shop;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 class MakeSellController extends Controller
 {
@@ -29,8 +31,8 @@ class MakeSellController extends Controller
         return response()->json($results);
     }
 
-    public function checkoutCart(Request $req)
+    public function checkoutCart(CheckoutRequest $req)
     {
-        dd($req->all());
+        return Redirect::route('employee.sell');
     }
 }
