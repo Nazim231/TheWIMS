@@ -80,7 +80,7 @@ btnFinalizeCheckout.addEventListener("click", function (e) {
             cartItems.clear();
             $("#selected-items").empty();
             $("#confirm-selected-items").empty();
-            console.log(response, cartItems.size());
+            console.log(response, cartItems.size);
         },
     });
 });

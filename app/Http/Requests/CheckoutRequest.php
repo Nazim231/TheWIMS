@@ -17,7 +17,10 @@ class CheckoutRequest extends FormRequest
         return true;
     }
 
-    protected function prepareForValidation()
+    /**
+     * Merge additional data or format data before validation
+     */
+    protected function prepareForValidation(): void
     {
         if (!($this->data)) return;
 
@@ -36,6 +39,7 @@ class CheckoutRequest extends FormRequest
             'shop_id' => $shop_id,
         ]);
     }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -44,12 +48,12 @@ class CheckoutRequest extends FormRequest
     public function rules(): array
     {
         $numProducts = sizeof($this->product_ids ?? []);
-        
+
         return [
             'product_ids' => 'required | array | min:1',
             'product_ids.*' => 'numeric | integer | gt:0 | exists:shops_stock,id,shop_id,' . $this->shop_id,
             'product_quantities' => 'required | array | min:' . $numProducts . '| max:' . $numProducts,
-            'product_quantities.*' => ['numeric', 'integer', 'gt:0', new QuantityInRangeRule]
+            'product_quantities.*' => 'numeric | integer | gt:0 | quantity_in_range',
         ];
     }
 }
