@@ -29,7 +29,7 @@ class ShopsStock extends Model
     {
         return $this->belongsToThrough(Product::class, ProductVariation::class, null, '', [
             ProductVariation::class => 'variation_id',
-            Product::class => 'product_id', 
+            Product::class => 'product_id',
         ]);
     }
 

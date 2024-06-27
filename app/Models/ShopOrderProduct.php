@@ -16,11 +16,13 @@ class ShopOrderProduct extends Model
         'approved_quantity'
     ];
 
-    public function order() {
+    public function order()
+    {
         return $this->belongsTo(ShopOrder::class, 'order_id');
     }
 
-    public function variation() {
+    public function variation()
+    {
         return $this->belongsTo(ProductVariation::class, 'variation_id');
     }
 }

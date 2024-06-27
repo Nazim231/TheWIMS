@@ -29,21 +29,24 @@ class Product extends Model
     /**
      * Get variants of product
      */
-    public function variants() {
+    public function variants()
+    {
         return $this->hasMany(ProductVariation::class);
     }
 
     /**
      * Get category of product
      */
-    public function category() {
+    public function category()
+    {
         return $this->belongsTo(Category::class);
     }
 
     /**
      * Get brand of product
      */
-    public function brand() {
+    public function brand()
+    {
         return $this->belongsTo(Brand::class);
     }
 }

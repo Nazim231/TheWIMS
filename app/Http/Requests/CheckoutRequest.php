@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Models\Shop;
-use App\Rules\QuantityInRangeRule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 

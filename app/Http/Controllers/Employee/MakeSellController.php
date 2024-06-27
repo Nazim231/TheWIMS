@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 
 class MakeSellController extends Controller
 {
@@ -33,6 +32,10 @@ class MakeSellController extends Controller
 
     public function checkoutCart(CheckoutRequest $req)
     {
-        return Redirect::route('employee.sell');
+        /**
+         * Validated request will return 2 arrays: product-ids & product-quantities
+         * TODO :: Update product quantities and create an invoice
+         */
+        return response()->json(['message' => 'In development']);
     }
 }

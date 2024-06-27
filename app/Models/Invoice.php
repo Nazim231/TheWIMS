@@ -5,23 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class Invoice extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name'
+        'shop_name',
+        'emp_name',
+        'shop_address',
+        'customer_name',
+        'customer_mobile'
     ];
 
-    protected $attributes = [
-        'parent_category_id' => null
-    ];
-
-    /**
-     * Get product of Category
-     */
     public function products()
     {
-        return $this->hasMany(Product::class);
+        return $this->hasMany(InvoiceProduct::class);
     }
 }

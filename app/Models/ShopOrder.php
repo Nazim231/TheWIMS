@@ -15,11 +15,13 @@ class ShopOrder extends Model
         'status',
     ];
 
-    public function shop() {
+    public function shop()
+    {
         return $this->belongsTo(Shop::class);
     }
 
-    public function products() {
+    public function products()
+    {
         return $this->hasMany(ShopOrderProduct::class, 'order_id');
     }
 }

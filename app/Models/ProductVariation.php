@@ -26,8 +26,8 @@ class ProductVariation extends Model
     /**
      * Get the product that owns this variation
      */
-    public function product() {
+    public function product()
+    {
         return $this->belongsTo(Product::class);
     }
-
 }

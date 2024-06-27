@@ -80,7 +80,18 @@ btnFinalizeCheckout.addEventListener("click", function (e) {
             cartItems.clear();
             $("#selected-items").empty();
             $("#confirm-selected-items").empty();
-            console.log(response, cartItems.size);
+            $("#checkout-total-cost").text('0.0');
+            console.log(response);
+        },
+        error: function (err) {
+            // iterating over each error occured in processing the request
+            for (let [key, value] of Object.entries(err.responseJSON.errors)) {
+                if (typeof(value) == 'string') {
+                    console.log(value);
+                    continue;
+                }
+                value.forEach((v) => console.log(v));
+            }
         },
     });
 });
