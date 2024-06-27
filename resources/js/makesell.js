@@ -2,6 +2,7 @@ const searchField = document.getElementById("search_text");
 const searchedResult = document.getElementById("searched-item");
 const btnCheckout = document.getElementById("btnCheckout");
 const btnFinalizeCheckout = document.getElementById("btnFinalizeCheckout");
+const btnSearchCustomer = document.getElementById("btnSearchCustomer");
 
 const cartItems = new Map();
 let totalCartCost = 0;
@@ -80,17 +81,53 @@ btnFinalizeCheckout.addEventListener("click", function (e) {
             cartItems.clear();
             $("#selected-items").empty();
             $("#confirm-selected-items").empty();
-            $("#checkout-total-cost").text('0.0');
+            $("#checkout-total-cost").text("0.0");
             console.log(response);
         },
         error: function (err) {
             // iterating over each error occured in processing the request
             for (let [key, value] of Object.entries(err.responseJSON.errors)) {
-                if (typeof(value) == 'string') {
+                if (typeof value == "string") {
                     console.log(value);
                     continue;
                 }
                 value.forEach((v) => console.log(v));
+            }
+        },
+    });
+});
+
+btnSearchCustomer.addEventListener("click", function (e) {
+    const url = this.dataset.ref;
+    console.log(url);
+    let mobileNum = $("#customerMobileNum").val();
+    const length = mobileNum.length;
+    mobileNum = Number(mobileNum);
+
+    if (mobileNum == NaN || length != 10) {
+        $("#errorMessage").text("Please enter a valid mobile number");
+        const errorModalInstance = new bootstrap.Modal(
+            document.getElementById("errorModal")
+        );
+        const errorModal = document.getElementById("errorModal");
+        errorModalInstance.show(errorModal);
+        return;
+    }
+
+    $.ajax({
+        url: url,
+        data: {
+            mobile_number: mobileNum,
+        },
+        success: function (response) {
+            console.log(response.message);
+        },
+        error: function (err) {
+            if (err.status == 404) {
+                const customerNameField = `
+                    <input type="text" class="form-control mt-2" name="customer_name" placeholder="Enter customer name">
+                `;
+                $("#customerDetails").append(customerNameField);
             }
         },
     });

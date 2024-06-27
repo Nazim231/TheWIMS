@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\StocksController as AdminManageStocks;
 use App\Http\Controllers\Admin\EmployeesController as AdminManageEmployees;
 use App\Http\Controllers\Admin\CategoriesController as AdminManageCategories;
 use App\Http\Controllers\Admin\OrdersController as AdminManageOrders;
+use App\Http\Controllers\Employee\CustomerController;
 use App\Http\Controllers\Employee\HomeController;
 use App\Http\Controllers\Employee\StocksController;
 use App\Http\Controllers\Employee\OrdersController;
@@ -112,6 +113,10 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/sell', 'index')->name('sell');
             Route::get('/sell/search_sku', 'searchSKUinShop')->name('sell.product.search');
             Route::post('/sell/checkout', 'checkoutCart')->name('sell.checkout');
+        });
+
+        Route::controller(CustomerController::class)->group(function  () {
+            Route::get('/customer', 'getCustomer')->name('customer.get');
         });
     });
 });
