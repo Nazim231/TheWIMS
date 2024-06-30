@@ -13,11 +13,17 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
-            $table->string('shop_name');
+            $table->unsignedBigInteger('emp_id');
             $table->string('emp_name');
+            $table->unsignedBigInteger('shop_id');
+            $table->string('shop_name');
             $table->string('shop_address');
+            $table->unsignedBigInteger('customer_id');
             $table->string('customer_name');
-            $table->string('customer_mobile');
+            $table->bigInteger('customer_mobile');
+            $table->foreign('emp_id')->references('id')->on('users');
+            $table->foreign('shop_id')->references('id')->on('shops');
+            $table->foreign('customer_id')->references('id')->on('customers');
             $table->timestamps();
         });
     }

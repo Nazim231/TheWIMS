@@ -19,7 +19,6 @@ return new class extends Migration
             $table->unsignedBigInteger('variation_id');
             $table->string('SKU');
             $table->string('quantity');
-            $table->timestamps();
             $table->foreign('invoice_id')->references('id')->on('invoices');
             $table->foreign('product_id')->references('id')->on('products');
             $table->foreign('variation_id')->references('id')->on('product_variations');
