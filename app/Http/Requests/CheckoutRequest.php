@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Customer;
 use App\Models\Shop;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
@@ -25,7 +26,8 @@ class CheckoutRequest extends FormRequest
 
         $product_ids = [];
         $product_quantities = [];
-        $shop_id = Shop::where('emp_id', Auth::user()->id)->get()[0]->id;
+        $user = Auth::user();
+        $shop = Shop::where('emp_id', $user->id)->get()[0];
 
         foreach ($this->data as $value) {
             $product_ids[] = $value['id'];
@@ -35,7 +37,12 @@ class CheckoutRequest extends FormRequest
         $this->merge([
             'product_ids' => $product_ids,
             'product_quantities' => $product_quantities,
-            'shop_id' => $shop_id,
+            'emp_id' => $user->id,
+            'emp_name' => $user->name,
+            'shop_id' => $shop->id,
+            'shop_name' => $shop->name,
+            'shop_address' => $shop->address,
+            'customer_id' => '',
         ]);
     }
 
@@ -53,6 +60,32 @@ class CheckoutRequest extends FormRequest
             'product_ids.*' => 'numeric | integer | gt:0 | exists:shops_stock,id,shop_id,' . $this->shop_id,
             'product_quantities' => 'required | array | min:' . $numProducts . '| max:' . $numProducts,
             'product_quantities.*' => 'numeric | integer | gt:0 | quantity_in_range',
+            'emp_id' => 'required | integer',
+            'emp_name' => 'required | string',
+            'shop_id' => 'required | integer',
+            'shop_name' => 'required | string',
+            'shop_address' => 'required | string',
+            'customer_name' => 'required | string',
+            'customer_mobile' => 'required | integer',
+            'total_amount' => 'required | numeric | gte:0'
         ];
+    }
+
+    /**
+     * Handle a passed validation attempt.
+     */
+    protected function passedValidation(): void
+    {
+        $customer = Customer::where('mobile_number', $this->customer_mobile)->get();
+        if (sizeof($customer ?? []) == 0) {
+            $data = [
+                'name' => $this->customer_name,
+                'mobile_number' => $this->customer_mobile,
+            ];
+            $customer = Customer::create($data);
+            $this->replace([...$this->all(), "customer_id" => $customer->id]);
+        } else {
+            $this->replace([...$this->all(), "customer_id" => $customer[0]->id]);
+        }   
     }
 }

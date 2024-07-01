@@ -9,13 +9,17 @@ class InvoiceProduct extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $fillable = [
         'invoice_id',
         'product_id',
         'product_name',
         'variation_id',
         'SKU',
-        'quantity'
+        'quantity',
+        'price',
+        'total_price',
     ];
 
     public function invoice()

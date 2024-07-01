@@ -21,6 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('customer_id');
             $table->string('customer_name');
             $table->bigInteger('customer_mobile');
+            $table->double('total_amount');
             $table->foreign('emp_id')->references('id')->on('users');
             $table->foreign('shop_id')->references('id')->on('shops');
             $table->foreign('customer_id')->references('id')->on('customers');

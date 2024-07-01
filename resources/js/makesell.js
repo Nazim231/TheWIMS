@@ -6,6 +6,8 @@ const btnSearchCustomer = document.getElementById("btnSearchCustomer");
 
 const cartItems = new Map();
 let totalCartCost = 0;
+let customerExists = false;
+let customerMobileNum, customerName;
 
 searchField.addEventListener("keypress", function (e) {
     const url = this.dataset.url;
@@ -38,29 +40,81 @@ btnCheckout.addEventListener("click", () => {
     let i = 0;
     let totalQty = 0;
     let totalAmt = 0;
+
+    if (cartItems.size == 0) {
+        $("#errorMessage").text("Cart is empty.");
+        showModal("errorModal");
+        return;
+    }
+
     cartItems.forEach((value) => {
         const itemRow = `
             <tr>
                 <td>${++i}</td>
-                <td>${value.name}</td>
+                <td>${value.product_name}</td>
                 <td>${value.quantity}</td>
-                <td>${value.totalPrice}</td>
+                <td>${value.total_price}</td>
             </tr>
         `;
         $("#confirm-selected-items").append(itemRow);
         totalQty += value.quantity;
-        totalAmt += value.totalPrice;
+        totalAmt += value.total_price;
     });
 
     $("#total-items").text(i);
     $("#total-qty").text(totalQty);
     $("#total-amount").text(totalAmt);
+    showModal("confirmCheckoutDialog");
+});
 
-    const checkoutModalInstance = new bootstrap.Modal(
-        document.getElementById("confirmCheckoutDialog")
-    );
-    const checkoutModal = document.getElementById("confirmCheckoutDialog");
-    checkoutModalInstance.show(checkoutModal);
+btnSearchCustomer.addEventListener("click", function (e) {
+    const url = this.dataset.ref;
+    customerMobileNum = $("#customerMobileNum").val();
+    const length = customerMobileNum.length;
+    customerMobileNum = Number(customerMobileNum);
+
+    if (customerMobileNum == NaN || length != 10) {
+        $("#errorMessage").text("Please enter a valid mobile number");
+        showModal("errorModal");
+        return;
+    }
+
+    $.ajax({
+        url: url,
+        data: {
+            mobile_number: customerMobileNum,
+        },
+        success: function (response) {
+            $("#finalizeCheckout").empty();
+            customerName = response.name;
+            customerExists = true;
+            const content = `
+                <p class="text-muted">Mobile Number: <span class="fw-semibold text-black">${customerMobileNum}</span></p>
+                <p class="text-muted mb-0">Customer Name: <span class="fw-semibold text-black">${customerName}</span></p>
+            `;
+            $("#finalizeCheckout").append(content);
+        },
+        error: function (err) {
+            if (err.status == 404) {
+                customerExists = false;
+                $("#finalizeCheckout").empty();
+
+                const content = `
+                    <p class="text-muted">Mobile Number: <span class="fw-semibold text-black">${customerMobileNum}</span><span class="fs-7 fst-italic"> (Customer not found)</span></p>
+                    <input type="text" class="form-control" name="customer_name" id="customerName"
+                        placeholder="Enter New Customer Name" focused required>
+                    <p class="text-muted fs-7 fst-italic">
+                        Customer name & mobile number will be saved in records for further invoice generations
+                    </p> 
+                `;
+                $("#finalizeCheckout").append(content);
+            }
+        },
+        complete: function (xhr) {
+            $("#finalAmount").text(totalCartCost);
+            showModal("finalizeCheckoutModal");
+        },
+    });
 });
 
 btnFinalizeCheckout.addEventListener("click", function (e) {
@@ -70,19 +124,27 @@ btnFinalizeCheckout.addEventListener("click", function (e) {
     const finalizeData = {};
     cartItems.forEach((value) => (finalizeData[value.id] = value));
 
+    const checkoutData = {
+        _token: token,
+        data: finalizeData,
+        total_amount: totalCartCost,
+        customer_exists: customerExists,
+        customer_name: customerExists ? customerName : $("#customerName").val(),
+        customer_mobile: customerMobileNum,
+        total_amount: totalCartCost,
+    };
+
     $.ajax({
         url: url,
         type: "POST",
-        data: {
-            _token: token,
-            data: finalizeData,
-        },
+        data: checkoutData,
         success: function (response) {
             cartItems.clear();
             $("#selected-items").empty();
             $("#confirm-selected-items").empty();
             $("#checkout-total-cost").text("0.0");
-            console.log(response);
+            $("#errorMessage").text(response.message);
+            showModal("errorModal");
         },
         error: function (err) {
             // iterating over each error occured in processing the request
@@ -97,41 +159,6 @@ btnFinalizeCheckout.addEventListener("click", function (e) {
     });
 });
 
-btnSearchCustomer.addEventListener("click", function (e) {
-    const url = this.dataset.ref;
-    console.log(url);
-    let mobileNum = $("#customerMobileNum").val();
-    const length = mobileNum.length;
-    mobileNum = Number(mobileNum);
-
-    if (mobileNum == NaN || length != 10) {
-        $("#errorMessage").text("Please enter a valid mobile number");
-        const errorModalInstance = new bootstrap.Modal(
-            document.getElementById("errorModal")
-        );
-        const errorModal = document.getElementById("errorModal");
-        errorModalInstance.show(errorModal);
-        return;
-    }
-
-    $.ajax({
-        url: url,
-        data: {
-            mobile_number: mobileNum,
-        },
-        success: function (response) {
-            console.log(response.message);
-        },
-        error: function (err) {
-            if (err.status == 404) {
-                const customerNameField = `
-                    <input type="text" class="form-control mt-2" name="customer_name" placeholder="Enter customer name">
-                `;
-                $("#customerDetails").append(customerNameField);
-            }
-        },
-    });
-});
 
 /**
  * Creates selectable searched product element
@@ -146,7 +173,7 @@ function createSearchedItemElem(result) {
 
     container.addEventListener("click", () => addItemToCart(result));
 
-    prodName.textContent = result.name;
+    prodName.textContent = result.product_name;
     sku.textContent = result.SKU;
 
     container.appendChild(prodName);
@@ -175,7 +202,7 @@ function addItemToCart(data) {
         <tr>
             <td>${itemPositionInUI + 1}</td>
             <td>${data.id}</td>
-            <td>${data.name}</td>
+            <td>${data.product_name}</td>
             <td>${data.SKU}</td>
             <td>${1}</td>
             <td>${data.price}</td>
@@ -185,7 +212,7 @@ function addItemToCart(data) {
 
     data.position = itemPositionInUI;
     data.quantity = 1;
-    data.totalPrice = data.price;
+    data.total_price = data.price;
     cartItems.set(data.id, data);
 
     $("#selected-items").append(rowCode);
@@ -209,7 +236,7 @@ function updateItemQuantity(itemId) {
     const cartProduct = cartItems.get(itemId);
 
     cartProduct.quantity += 1;
-    cartProduct.totalPrice += cartProduct.price;
+    cartProduct.total_price += cartProduct.price;
     cartItems.set(itemId, cartProduct);
 
     // updating quantity in GUI
@@ -226,7 +253,7 @@ function updateItemQuantity(itemId) {
         .eq(cartProduct.position)
         .children()
         .eq(6) // 5 is the total price column index
-        .html(cartProduct.totalPrice);
+        .html(cartProduct.total_price);
 
     // updating overall total cost
     totalCartCost += cartProduct.price;
@@ -239,9 +266,16 @@ function setSearchFieldFocused() {
     $("#search_text").focus();
 }
 
+function showModal(modalId) {
+    const modal = document.getElementById(modalId);
+    const instance = new bootstrap.Modal(modal);
+    instance.show(modal);
+}
+
 document.addEventListener("click", () => {
     /**
      *  TODO : If there are items in cart
      * & user is changing the page, show a confirm dialog for Discarding Cart.
      */
 });
+

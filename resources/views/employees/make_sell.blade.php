@@ -93,15 +93,41 @@
                     <div class="d-flex">
                         <input type="text" name="customer_mobile_num" id="customerMobileNum"
                             class="form-control flex-grow-1 me-2" placeholder="Customer Mobile Number">
-                        <button type="button" class="btn btn-primary" id="btnSearchCustomer"
-                            data-ref="{{ route('employee.customer.get') }}">Search</button>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-target="#confirmCheckoutDialog"
                         data-bs-toggle="modal">Back</button>
-                    <button type="button" id="btnFinalizeCheckout" class="btn btn-success" data-ref="{{ csrf_token() }}"
-                        data-url="{{ route('employee.sell.checkout') }}">Confirm Checkout</button>
+                    <button type="button" class="btn btn-primary" id="btnSearchCustomer"
+                        data-ref="{{ route('employee.customer.get') }}">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Finalize Checkout Dialog --}}
+    <div class="modal fade" id="finalizeCheckoutModal" tabindex="-1" data-bs-backdrop="static"
+        aria-labelledby="#lblFinalizeCheckout" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 id="lblFinalizeCheckout" class="modal-title fs-5">Confirm Checkout</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+                </div>
+                <div class="modal-body" id="finalizeCheckout">
+                    {{-- checkout verification details will be previewed here --}}
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <p>Amount to be paid: <span class="fw-bold" id="finalAmount"></span></p>
+
+                    <div>
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                            aria-label="back">Back</button>
+                        <button type="button" id="btnFinalizeCheckout" class="btn btn-success"
+                            data-ref="{{ csrf_token() }}" data-url="{{ route('employee.sell.checkout') }}">
+                            Confirm Checkout
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

@@ -32,7 +32,7 @@ class QuantityInRangeRule implements DataAwareRule, ValidationRule
 
         $stock_qty = ShopsStock::where('shop_id', $this->data->shop_id)->where('id', $product_id)->get()[0]->quantity;
         if ($value > $stock_qty) {
-            $fail('Invalid quantity for product: ' . $this->data->data[$product_id]['name'] . '(' . $this->data->data[$product_id]['SKU'] . ')');
+            $fail('Invalid quantity for product: ' . $this->data->data[$product_id]['product_name'] . '(' . $this->data->data[$product_id]['SKU'] . ')');
         }
     }
 }
