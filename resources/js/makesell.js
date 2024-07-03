@@ -3,6 +3,7 @@ const searchedResult = document.getElementById("searched-item");
 const btnCheckout = document.getElementById("btnCheckout");
 const btnFinalizeCheckout = document.getElementById("btnFinalizeCheckout");
 const btnSearchCustomer = document.getElementById("btnSearchCustomer");
+const btnClearCart = document.getElementById("btnClearCart");
 
 const cartItems = new Map();
 let totalCartCost = 0;
@@ -141,8 +142,7 @@ btnFinalizeCheckout.addEventListener("click", function (e) {
         success: function (response) {
             cartItems.clear();
             $("#selected-items").empty();
-            $("#confirm-selected-items").empty();
-            $("#checkout-total-cost").text("0.0");
+            $("#checkout-total-cost").text("0.00");
             $("#errorMessage").text(response.message);
             showModal("errorModal");
         },
@@ -159,6 +159,32 @@ btnFinalizeCheckout.addEventListener("click", function (e) {
     });
 });
 
+btnClearCart.addEventListener("click", () => {
+    const clearCartBtnId = "confirmClearCart";
+    $("#errorMessage").text("Are you sure you want to clear cart?");
+    if (document.getElementById(clearCartBtnId) == null) {
+        $("#errorModal .modal-footer").append(
+            `<button type="button" class="btn btn-danger" id="${clearCartBtnId}" data-bs-dismiss="modal">Confirm</button>`
+        );
+        document
+            .getElementById(clearCartBtnId)
+            .addEventListener("click", () => clearCart(clearCartBtnId), false);
+    }
+    showModal("errorModal");
+});
+
+/**
+ * Removes all element from the cart and reset the cart values to its default.
+ *
+ * @param {string} buttonId id of button that needs to be removed from BS Modal
+ */
+function clearCart(buttonId) {
+    cartItems.clear();
+    $("#selected-items").empty();
+    $("#checkout-total-cost").text("0.00");
+    totalCartCost = 0;
+    $(`#${buttonId}`).remove();
+}
 
 /**
  * Creates selectable searched product element
@@ -187,7 +213,6 @@ function createSearchedItemElem(result) {
  * and creates new row of item in cart table.
  *
  * @param {Object} data Object containing details of product.
- *
  */
 function addItemToCart(data) {
     if (cartItems.get(data.id)) {
@@ -222,6 +247,9 @@ function addItemToCart(data) {
     setSearchFieldFocused();
 }
 
+/**
+ * Clear items and hide search results after an item is selected
+ */
 function clearAndHideSearchedItems() {
     $("#searched-item").empty();
     searchedResult.style.visibility = "hidden";
@@ -261,11 +289,19 @@ function updateItemQuantity(itemId) {
     clearAndHideSearchedItems();
 }
 
+/**
+ * Sets focus to the product search input field
+ */
 function setSearchFieldFocused() {
     $("#search_text").val("");
     $("#search_text").focus();
 }
 
+/**
+ * Shows bootstrap modal dynamically
+ *
+ * @param {string} modalId ID of the modal to be shown
+ */
 function showModal(modalId) {
     const modal = document.getElementById(modalId);
     const instance = new bootstrap.Modal(modal);
@@ -278,4 +314,3 @@ document.addEventListener("click", () => {
      * & user is changing the page, show a confirm dialog for Discarding Cart.
      */
 });
-

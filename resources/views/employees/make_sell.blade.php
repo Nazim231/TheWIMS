@@ -14,7 +14,7 @@
                 data-url = "{{ route('employee.sell.product.search') }}" autofocus>
             <div id="searched-item" class="rounded-bottom bg-secondary searched-item"></div>
         </div>
-        <button type="button" class="btn btn-danger ms-3 px-4">Clear Cart</button>
+        <button type="button" id="btnClearCart" class="btn btn-danger ms-3 px-4">Clear Cart</button>
     </div>
 
     <hr>
