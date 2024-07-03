@@ -30,6 +30,7 @@
                 <th>Quantity</th>
                 <th>Price</th>
                 <th>Total Price</th>
+                <th>Action</th>
             </thead>
             <tbody id="selected-items">
             </tbody>

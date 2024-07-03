@@ -221,7 +221,7 @@ function addItemToCart(data) {
         return;
     }
 
-    const itemPositionInUI = cartItems.size;
+    const itemPositionInUI = $("#selected-items").children().length;
 
     const rowCode = `
         <tr>
@@ -232,17 +232,41 @@ function addItemToCart(data) {
             <td>${1}</td>
             <td>${data.price}</td>
             <td>${data.price}</td>
+            <td>
+                <i class="fa-solid fa-trash" 
+                    style="color: #e10526; cursor: pointer;" 
+                    data-id="${data.id}">
+                </i>
+            </td>
         </tr>
     `;
 
+    // implementing some additional properties to the item object and adding it to the table
     data.position = itemPositionInUI;
     data.quantity = 1;
     data.total_price = data.price;
     cartItems.set(data.id, data);
-
     $("#selected-items").append(rowCode);
+
     totalCartCost += data.price;
     $("#checkout-total-cost").text(totalCartCost);
+
+    // adding a function to item for deleting it from the cart list and table
+    $(`[data-id="${data.id}"]`).on("click", () => {
+        // removing respective item row from table and cart list and updating the total cost
+        $("#selected-items").children().eq(data.position).remove();
+        totalCartCost -= cartItems.get(data.id).total_price;
+        $("#checkout-total-cost").text(totalCartCost);
+        cartItems.delete(data.id);
+
+        // updating each item position in the cart list
+        let position = 0;
+        cartItems.forEach((value) => {
+            if (value.position != position) value.position = position;
+            position++;
+        });
+    });
+
     clearAndHideSearchedItems();
     setSearchFieldFocused();
 }
