@@ -13,6 +13,7 @@ use App\Http\Controllers\Employee\HomeController;
 use App\Http\Controllers\Employee\StocksController;
 use App\Http\Controllers\Employee\OrdersController;
 use App\Http\Controllers\Employee\MakeSellController;
+use App\Http\Controllers\Employee\InvoicesController as SellHistoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -117,6 +118,11 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::controller(CustomerController::class)->group(function  () {
             Route::get('/customer', 'getCustomer')->name('customer.get');
+        });
+
+        Route::controller(SellHistoryController::class)->group(function () {
+            Route::get('/invoices', 'index')->name('invoices');
+            Route::get('/invoices/{id}', 'getById')->name('invoices.get');
         });
     });
 });

@@ -7,7 +7,7 @@
 
     <title>TheWiMS | @yield('breadcrumb')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     @vite(['resources/css/app.css'])
 </head>
 
@@ -29,6 +29,8 @@
                         class="nav-link p-4 rounded text-white {{ Route::is('employee.stocks*') ? 'active' : '' }}">Stocks</a>
                     <a href="{{ route('employee.order') }}"
                         class="nav-link p-4 rounded text-white {{ Route::is('employee.order*') ? 'active' : '' }}">Orders</a>
+                    <a href="{{ route('employee.invoices') }}"
+                        class="nav-link p-4 rounded text-white {{ Route::is('employee.invoices*') ? 'active' : '' }}">History</a>
                 </nav>
 
                 <a href="{{ route('auth.logout') }}" class="btn btn-outline-light mt-auto mb-4 p-3">Logout</a>
