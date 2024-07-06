@@ -123,6 +123,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::controller(SellHistoryController::class)->group(function () {
             Route::get('/invoices', 'index')->name('invoices');
             Route::get('/invoices/{id}', 'getById')->name('invoices.get');
+            Route::get('/invoice_print/{id}', 'printInvoice')->name('invoices.print');
         });
     });
 });

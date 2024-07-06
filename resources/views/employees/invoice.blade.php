@@ -18,10 +18,10 @@
             <p>Customer Mobile: <span class="fw-bold">{{ $invoice->customer_mobile }}</span></p>
             <p>Total Items: <span class="fw-bold">{{ $invoice->products->count() }}</span></p>
             <p class="mb-0">
-                <button type="button" class="btn btn-sm btn-primary">
+                <a href="{{ route('employee.invoices.print', $invoice->id) }}" class="btn btn-sm btn-primary">
                     <i class="fa-solid fa-print me-2"></i>
                     Print Invoice
-                </button>
+                </a>
             </p>
         </div>
     </div>
@@ -31,7 +31,7 @@
             <th class="bg-light">Name</th>
             <th class="bg-light">SKU</th>
             <th class="bg-light">Quantity</th>
-            <th class="bg-light">Price per quantity</th>
+            <th class="bg-light">Price</th>
             <th class="bg-light">Total Price</th>
         </thead>
         <tbody>

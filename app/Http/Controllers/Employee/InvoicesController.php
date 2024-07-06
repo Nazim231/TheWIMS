@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Employee;
 
+use Carbon\Carbon;
 use App\Models\Shop;
 use App\Models\Invoice;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,6 +31,24 @@ class InvoicesController extends Controller
         } else {
             return redirect()->route('employee.invoices')->withErrors([
                 'message' => 'Invalid invoice'
+            ]);
+        }
+    }
+
+    public function printInvoice($id)
+    {
+        $invoiceExists = Invoice::where(['id' => $id, 'shop_id' => $this->getShopId()])->exists();
+        if ($invoiceExists) {
+            $invoice = Invoice::with('products')->where('id', $id)->get()[0]->toArray();
+            $invoice['current_date'] = Carbon::now()->format('d M, Y');
+            Pdf::setOption(['defaultFont' => 'Ubuntu']);
+            view()->share('invoice', $invoice);
+            $pdf = Pdf::loadView('layouts.invoice', $invoice);
+            $file_name = 'invoice-' . $invoice['id'] . '-' . Carbon::now()->toDateString() . '.pdf';
+            return $pdf->download($file_name);
+        } else {
+            return redirect()->route('employee.invoices')->withErrors([
+                'message' => 'Invoice with ID: #' . $id . ' doesn\'t exists',
             ]);
         }
     }
