@@ -37,7 +37,7 @@
                         <td>{{ $invoice->products_count }}</td>
                         <td>{{ $invoice->total_amount }}</td>
                         <td>{{ $invoice->created_at }}</td>
-                        <td><i class="fa-solid fa-print text-secondary"></i></td>
+                        <td><a href="{{ route('employee.invoices.print', $invoice->id) }}"><i class="fa-solid fa-print text-secondary"></i></a></td>
                     </tr>
                 @endforeach
             </tbody>

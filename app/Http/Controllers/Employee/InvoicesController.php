@@ -55,6 +55,10 @@ class InvoicesController extends Controller
 
     private function getShopId(): int
     {
-        return Shop::where('emp_id', Auth::user()->id)->get()[0]->id;
+        $empAssignedToShop = Shop::where('emp_id', Auth::user()->id)->exists();
+        if ($empAssignedToShop)
+            return Shop::where('emp_id', Auth::user()->id)->get()[0]->id;
+        else
+            return -1;
     }
 }

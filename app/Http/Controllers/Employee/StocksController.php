@@ -4,9 +4,7 @@ namespace App\Http\Controllers\Employee;
 
 use Carbon\Carbon;
 use App\Models\Shop;
-use App\Models\User;
 use App\Models\Product;
-use App\Models\ShopsStock;
 use Illuminate\Http\Request;
 use App\Models\ProductVariation;
 use Illuminate\Routing\Controller;
@@ -16,7 +14,6 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\PlaceShopStockOrder;
 use App\Models\ShopOrder;
 use App\Models\ShopOrderProduct;
-use Exception;
 
 class StocksController extends Controller
 {
