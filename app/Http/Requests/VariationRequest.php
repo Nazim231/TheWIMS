@@ -33,7 +33,7 @@ class VariationRequest extends FormRequest
             'variation_color' => array_slice($this->variation_color, 0, $variationNumbers),
             'variation_size' => array_slice($this->variation_size, 0, $variationNumbers),
             'variation_qty' => array_slice($this->variation_qty, 0, $variationNumbers),
-            'cost_price' => array_slice($this->cost_price, 0, $variationNumbers),
+            'variation_cost_price' => array_slice($this->variation_cost_price, 0, $variationNumbers),
             'variations_count' => $variationNumbers,
         ]);
 
@@ -51,7 +51,7 @@ class VariationRequest extends FormRequest
             'variation_sku' => ['required', 'min:1', new UniqueSKURule],
             'variation_selling_price' => 'required | min:1',
             'variation_mrp' => 'required | min:1',
-            'cost_price' => 'required | min:1',
+            'variation_cost_price' => 'required | min:1',
             'variation_qty' => 'required | min:1',
             // Validate for Variation & Sub-Variation Type
             'variation_type' => 'required_if:variation,on',
@@ -61,7 +61,7 @@ class VariationRequest extends FormRequest
             'variation_sku.*' => 'required_if:variation_selected.*,on|unique:product_variations,sku',
             'variation_selling_price.*' => 'required_if:variation_selected.*,on | gt:0 | lte:variation_mrp.*',
             'variation_mrp.*' => 'required_if:variation_selected.*,on | gt:0',
-            'cost_price.*' => 'required_if:variation_selected.*,on | gt:0',
+            'variation_cost_price.*' => 'required_if:variation_selected.*,on | gt:0',
             'variation_qty.*' => 'required_if:variation_selected.*,on | gt:0',
             'variations_count' => '',
         ];
