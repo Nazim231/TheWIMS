@@ -41,6 +41,7 @@ class StocksController extends Controller
     public function addStock(ProductRequest $req)
     {
         $prodData = $req->validated();
+        // dd($prodData, $req->all());
         $addedProduct = Product::create($prodData);
         $newProdId = $addedProduct->id;
 
@@ -53,7 +54,6 @@ class StocksController extends Controller
     public function addVariations(VariationRequest $req)
     {
 
-        $variationsCount = $req->variation_numbers * $req->sub_variation_numbers;
         $this->addVariationsToDB($req->product_id, $req->validated());
         return redirect()->back();
     }
@@ -73,6 +73,7 @@ class StocksController extends Controller
                 'color' => $variationsData['variation_color'][$indexValue] ?? null,
                 'size' => $variationsData['variation_size'][$indexValue] ?? null,
                 'quantity' => $variationsData['variation_qty'][$indexValue],
+                'cost_price' => $variationsData['variation_cost_price'][$indexValue],
             ];
             ProductVariation::create($variantData);
         }

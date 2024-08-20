@@ -14,6 +14,7 @@ export const generateTable = (formData: any, variationContainer: HTMLElement) =>
         "Qty.",
         "MRP",
         "Selling Price",
+        "Cost Price",
     ];
 
     if (formData.variation) tableHeadings.push(formData.variation_type);
@@ -56,11 +57,13 @@ export const generateTable = (formData: any, variationContainer: HTMLElement) =>
         "qty",
         "mrp",
         "selling_price",
+        "cost_price"
     ];
     const fieldTypes = [
         "checkbox",
         "text",
         "text",
+        "number",
         "number",
         "number",
         "number",

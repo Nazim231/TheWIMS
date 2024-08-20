@@ -21,6 +21,7 @@ class ProductVariation extends Model
         'color',
         'size',
         'quantity',
+        'cost_price',
     ];
 
     /**
