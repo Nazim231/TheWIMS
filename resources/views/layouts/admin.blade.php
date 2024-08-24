@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>TheWiMS | @yield('breadcrumb')</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -52,19 +52,19 @@
                     </a>
                 </nav>
                 <div class="footer">
-                    <div class="profile">
+                    <span href="{{ route('admin.stocks') }}" class="profile">
                         <span>
                             <img src="{{ @asset('images/icons/ic-user.svg') }}" alt="">
                             Hi, {{ Auth::user()->name }}
                         </span>
-                        <a href="{{ route('auth.logout') }}">
+                        <a href="{{ route('auth.logout') }}" class="btn-logout">
                             <img src="{{ @asset('images/icons/ic-logout.svg') }}" alt="">
-                        </span>    
-                    </a>
+                        </a>    
+                    </span>
                 </div>
             </aside>
             {{-- Main Content --}}
-            <div class="col p-4">
+            <div class="main-content">
                 @yield('main-content')
             </div>
         </div>
