@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Znck\Eloquent\Traits\BelongsToThrough;
 
 class InvoiceProduct extends Model
 {
     use HasFactory;
+    use BelongsToThrough;
 
     public $timestamps = false;
 
@@ -24,6 +26,19 @@ class InvoiceProduct extends Model
 
     public function invoice()
     {
-        return $this->belongsToMany(Invoice::class);
+        return $this->belongsTo(Invoice::class);
+    }
+
+    public function variation()
+    {
+        return $this->belongsTo(ProductVariation::class, 'variation_id');
+    }
+
+    public function product()
+    {
+        return $this->belongsToThrough(Product::class, ProductVariation::class, null, '', [
+            ProductVariation::class => 'variation_id',
+            Product::class => 'product_id'
+        ]);
     }
 }

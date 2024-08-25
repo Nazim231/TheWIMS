@@ -16,17 +16,11 @@
                 <span class="time-period-filter">(This week)</span>
             </div>
             <div class="m-card-body">
-                <p>0</p>
+                <p>{{ $item_sold->current }}</p>
             </div>
             <div class="m-card-footer">
-                <div class="profit">
-                    <img src="{{ asset('images/icons/ic-profit.svg') }}" alt="">
-                    <span>{{ '+0.0% Last Week' }}</span>
-                </div>
-                <div class="loss">
-                    <img src="{{ asset('images/icons/ic-loss.svg') }}" alt="">
-                    <span>{{ '-0.0% Last Month' }}</span>
-                </div>
+                <x-profit-loss-percent value="{{ $item_sold->first_period_percent }}" period="Week" />
+                <x-profit-loss-percent value="{{ '+0.0' }}" period="Month" />
             </div>
         </div>
         <div class="m-card">
@@ -35,17 +29,11 @@
                 <span class="time-period-filter">(This week)</span>
             </div>
             <div class="m-card-body">
-                <p>0</p>
+                <p>{{ 'Rs. ' . $expense->current }}</p>
             </div>
             <div class="m-card-footer">
-                <div class="profit">
-                    <img src="{{ asset('images/icons/ic-profit.svg') }}" alt="">
-                    <span>{{ '+0.0% Last Week' }}</span>
-                </div>
-                <div class="loss">
-                    <img src="{{ asset('images/icons/ic-loss.svg') }}" alt="">
-                    <span>{{ '-0.0% Last Month' }}</span>
-                </div>
+                <x-profit-loss-percent value="{{ $expense->first_period_percent }}" period="Week" />
+                <x-profit-loss-percent value="{{ '+0.0' }}" period="Month" />
             </div>
         </div>
         <div class="m-card">
@@ -54,17 +42,24 @@
                 <span class="time-period-filter">(This week)</span>
             </div>
             <div class="m-card-body">
-                <p>0</p>
+                <p>{{ 'Rs. ' . $revenue->current }}</p>
             </div>
             <div class="m-card-footer">
-                <div class="profit">
-                    <img src="{{ asset('images/icons/ic-profit.svg') }}" alt="">
-                    <span>{{ '+0.0% Last Week' }}</span>
-                </div>
-                <div class="loss">
-                    <img src="{{ asset('images/icons/ic-loss.svg') }}" alt="">
-                    <span>{{ '-0.0% Last Month' }}</span>
-                </div>
+                <x-profit-loss-percent value="{{ $revenue->first_period_percent }}" period="Week" />
+                <x-profit-loss-percent value="{{ '+0.0' }}" period="Month" />
+            </div>
+        </div>
+        <div class="m-card">
+            <div class="m-card-header">
+                <h3>Profit</h3>
+                <span class="time-period-filter">(This Week)</span>
+            </div>
+            <div class="m-card-body">
+                <p>{{ 'Rs. ' . $profit->current }}</p>
+            </div>
+            <div class="m-card-footer">
+                <x-profit-loss-percent value="{{ $profit->weekProfitPercent }}" period="Week" />
+                <x-profit-loss-percent value="{{ '+0.0' }}" period="Month" />
             </div>
         </div>
     </div>

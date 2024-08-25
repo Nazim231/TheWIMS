@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ShopsController as AdminManageShops;
 use App\Http\Controllers\Admin\StocksController as AdminManageStocks;
 use App\Http\Controllers\Admin\EmployeesController as AdminManageEmployees;
 use App\Http\Controllers\Admin\CategoriesController as AdminManageCategories;
+use App\Http\Controllers\Admin\HomeController as AdminHomeController;
 use App\Http\Controllers\Admin\OrdersController as AdminManageOrders;
 use App\Http\Controllers\Employee\CustomerController;
 use App\Http\Controllers\Employee\HomeController;
@@ -51,7 +52,10 @@ Route::group(['middleware' => 'auth'], function () {
     */
     Route::group(['middleware' => 'is_admin', 'prefix' => 'admin/', 'as' => 'admin.'], function () {
 
-        Route::view('/', 'admin.home')->name('home');
+        Route::controller(AdminHomeController::class)->group(function () {
+            Route::get('/', 'index')->name('home');
+        });
+
         // Shop Routes
         Route::controller(AdminManageShops::class)->group(function () {
             Route::get('/shops', 'showPage')->name('shops');
@@ -116,7 +120,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/sell/checkout', 'checkoutCart')->name('sell.checkout');
         });
 
-        Route::controller(CustomerController::class)->group(function  () {
+        Route::controller(CustomerController::class)->group(function () {
             Route::get('/customer', 'getCustomer')->name('customer.get');
         });
 

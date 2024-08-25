@@ -142,11 +142,14 @@ body {
     flex-wrap: wrap;
 }
 
+.m-card-group > .m-card {
+    min-width: 360px;
+}
+
 .m-card {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 340px;
     gap: 16px;
     min-height: 120px;
     padding: 16px;
