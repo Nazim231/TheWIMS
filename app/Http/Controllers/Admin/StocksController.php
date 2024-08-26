@@ -9,6 +9,8 @@ use App\Models\ProductVariation;
 use Illuminate\Routing\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Http\Requests\VariationRequest;
+use App\Models\Expense;
+use App\Models\ExpenseItem;
 use Illuminate\Support\Facades\Redirect;
 
 /*
@@ -60,6 +62,8 @@ class StocksController extends Controller
 
     private function addVariationsToDB($parentProductId, $variationsData)
     {
+        $expense = Expense::create([]);
+        $totalExpense = 0;
         for ($indexValue = 0; $indexValue < $variationsData['variations_count']; $indexValue++) {
 
             $variantData = [
@@ -75,7 +79,18 @@ class StocksController extends Controller
                 'quantity' => $variationsData['variation_qty'][$indexValue],
                 'cost_price' => $variationsData['variation_cost_price'][$indexValue],
             ];
-            ProductVariation::create($variantData);
+            $variant = ProductVariation::create($variantData);
+            $expenseData = [
+                'expense_id' => $expense->id,
+                'variation_id' => $variant->id,
+                'quantity' => $variantData['quantity'],
+                'price' => $variantData['cost_price'],
+                'total_price' => $variantData['quantity'] * $variantData['cost_price'] 
+            ];
+            ExpenseItem::create($expenseData);
+            $totalExpense += $expenseData['total_price'];
         }
+        $expense->total_price = $totalExpense;
+        $expense->save();
     }
 }

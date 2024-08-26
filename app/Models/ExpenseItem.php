@@ -10,7 +10,7 @@ class ExpenseItem extends Model
     use HasFactory;
 
     protected $fillable = [
-        'expenses_id',
+        'expense_id',
         'variation_id',
         'quantity',
         'price',
