@@ -48,8 +48,14 @@ trait RevenueTrait
 
         $currRevenue = $revenue['current'];
         $prevRevenue = $revenue['previous'];
-        $percent = number_format(($currRevenue - $prevRevenue) * 100 / ($prevRevenue ?? 1), 1);
-        $revenue['first_period_percent'] = $percent;
+        if ($currRevenue == 0)
+            $revenue['first_period_percent'] = -100;
+        else if ($prevRevenue == 0)
+            $revenue['first_period_percent'] = +100;
+        else {
+            $percent = number_format(($currRevenue - $prevRevenue) * 100 / $prevRevenue, 1);
+            $revenue['first_period_percent'] = $percent;
+        }
         return (object) $revenue;
     }
 }

@@ -48,8 +48,14 @@ trait ItemSoldTrait
         $quantity = $this->getSoldItemsFromDB($type);
         $currQuantity = $quantity['current'];
         $prevQuantity = $quantity['previous'];
-        $percent = number_format(($currQuantity - $prevQuantity) * 100 / ($prevQuantity ?? 1), 1);
-        $quantity['first_period_percent'] = $percent;
+        if ($currQuantity == 0)
+            $quantity['first_period_percent'] = -100;
+        else if ($prevQuantity == 0)
+            $quantity['first_period_percent'] = +100;
+        else {
+            $percent = number_format(($currQuantity - $prevQuantity) * 100 / $prevQuantity, 1);
+            $quantity['first_period_percent'] = $percent;
+        }
 
         return (object) $quantity;
     }

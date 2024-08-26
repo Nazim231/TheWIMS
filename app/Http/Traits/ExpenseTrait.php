@@ -47,8 +47,14 @@ trait ExpenseTrait
 
         $currExpense = $expense['current'];
         $prevExpense = $expense['previous'];
-        $percent = number_format(($currExpense - $prevExpense) * 100 / ($prevExpense ?? 1), 1);
-        $expense['first_period_percent'] = $percent;
+        if ($currExpense == 0)
+            $expense['first_period_percent'] = -100;
+        else if ($prevExpense == 0)
+            $expense['first_period_percent'] = +100;
+        else {
+            $percent = number_format(($currExpense - $prevExpense) * 100 / $prevExpense, 1);
+            $expense['first_period_percent'] = $percent;
+        }
 
         return (object) $expense;
     }

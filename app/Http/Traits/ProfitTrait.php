@@ -37,9 +37,14 @@ trait ProfitTrait
         $profit = $this->getWeekProfitFromDB();
         $currProfit = $profit['current'];
         $prevProfit = $profit['previous'];
-        $weekProfitPercent = number_format(($currProfit - $prevProfit) * 100 / ($prevProfit ?? 1), 1);
-        $profit['weekProfitPercent'] = $weekProfitPercent;
-        
+        if ($currProfit == 0)
+            $profit['weekProfitPercent'] = -100;
+        else if ($prevProfit == 0)
+            $profit['weekProfitPercent'] = +100;
+        else {
+            $weekProfitPercent = number_format(($currProfit - $prevProfit) * 100 / ($prevProfit ?? 1), 1);
+            $profit['weekProfitPercent'] = $weekProfitPercent;
+        }
         return (object) $profit;
     }
 }

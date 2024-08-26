@@ -17,11 +17,16 @@ class HomeController extends Controller
 
     public function index()
     {
+        /**
+         * ! PROBLEM :: Expense & Revenue are estimated from entire data
+         * * SOLUTION :: Create new table that will store the stock incoming & outgoing history 
+         * *             and fetch the Expenses & Revenue from those tables.
+         */
         $profit = $this->getWeeklyProfit();
         $item_sold = $this->getSoldItems();
         $expense = $this->getExpenses();
         $revenue = $this->getRevenues();
-        
+
         return view('admin.home', compact('profit', 'item_sold', 'expense', 'revenue'));
     }
 }
