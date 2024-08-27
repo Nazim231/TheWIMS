@@ -8,17 +8,21 @@ use Illuminate\Support\Facades\DB;
 
 trait ProfitTrait
 {
-    private function getWeekProfitFromDB()
+    use TimePeriodValueTrait;
+
+    private function getWeekProfitFromDB($type)
     {
-        $currentWeek = Carbon::now()->weekOfYear;
-        $lastWeek = $currentWeek - 1;
+        $current = $this->getCurrentDateValue($type);
+        $previous = $current - 1;
+        
+        $filter = $type . '(invoices.created_at)';
         $profitsCollection = InvoiceProduct::join('product_variations as pv', 'variation_id', 'pv.id')
             ->join('invoices', 'invoice_id', 'invoices.id')
-            ->selectRaw('WEEK(invoices.created_at) as week')
+            ->selectRaw($filter . ' as time_period')
             ->selectRaw('SUM(total_price - (cost_price * invoice_products.quantity)) as profit')
-            ->whereRaw('WEEK(invoices.created_at) = ?', [$currentWeek])
-            ->orWhereRaw('WEEK(invoices.created_at) = ?', [$lastWeek])
-            ->groupBy(DB::raw('WEEK(invoices.created_at)'))
+            ->whereRaw($filter . ' = ?', [$current])
+            ->orWhereRaw($filter . ' = ?', [$previous])
+            ->groupByRaw($filter)
             ->get();
 
         $profit = [
@@ -26,24 +30,25 @@ trait ProfitTrait
             'previous' => 0,
         ];
         foreach ($profitsCollection as $profitItem) {
-            $profitType = $profitItem->week == $currentWeek ? 'current' : 'previous';
+            $profitType = $profitItem->time_period == $current ? 'current' : 'previous';
             $profit[$profitType] = $profitItem->profit;
         }
         return $profit;
     }
 
-    public function getWeeklyProfit()
+    public function getWeeklyProfit($type = 'week')
     {
-        $profit = $this->getWeekProfitFromDB();
+        $profit = $this->getWeekProfitFromDB($type);
+
         $currProfit = $profit['current'];
         $prevProfit = $profit['previous'];
         if ($currProfit == 0)
-            $profit['weekProfitPercent'] = -100;
+            $profit['first_period_percent'] = -100;
         else if ($prevProfit == 0)
-            $profit['weekProfitPercent'] = +100;
+            $profit['first_period_percent'] = +100;
         else {
-            $weekProfitPercent = number_format(($currProfit - $prevProfit) * 100 / ($prevProfit ?? 1), 1);
-            $profit['weekProfitPercent'] = $weekProfitPercent;
+            $percent = number_format(($currProfit - $prevProfit) * 100 / $prevProfit, 1);
+            $profit['first_period_percent'] = $percent;
         }
         return (object) $profit;
     }

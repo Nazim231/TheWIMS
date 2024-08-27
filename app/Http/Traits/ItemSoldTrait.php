@@ -8,19 +8,11 @@ use App\Models\InvoiceProduct;
 
 trait ItemSoldTrait
 {
+    use TimePeriodValueTrait;
+
     private function getSoldItemsFromDB($type)
     {
-        $current = '';
-        switch ($type) {
-            case 'month':
-                $current = Carbon::now()->month;
-                break;
-            case 'year':
-                $current = Carbon::now()->year;
-                break;
-            default:
-                $current = Carbon::now()->weekOfYear;
-        }
+        $current = $this->getCurrentDateValue($type);
         $previous = $current - 1;
 
         $filter = $type . '(created_at)';

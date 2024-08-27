@@ -2,29 +2,21 @@
 
 namespace App\Http\Traits;
 
+use App\Models\Expense;
 use App\Models\ProductVariation;
 use Carbon\Carbon;
 
 trait ExpenseTrait
 {
+    use TimePeriodValueTrait;
+
     private function getExpenseFromDB($type)
     {
-        $current = '';
-        switch ($type) {
-            case 'month':
-                $current = Carbon::now()->month;
-                break;
-            case 'year':
-                $current = Carbon::now()->year;
-                break;
-            default:
-                $current = Carbon::now()->weekOfYear;
-        }
+        $current = $this->getCurrentDateValue($type);
         $previous = $current - 1;
-
-        $filter = $type . '(updated_at)';
-        $expenseCollection = ProductVariation::selectRaw($filter . ' as time_period')
-            ->selectRaw('SUM(cost_price * quantity) as expense')
+        $filter = $type . '(created_at)';
+        $expenseCollection = Expense::selectRaw($filter . ' as time_period')
+            ->selectRaw('SUM(total_price) as total_price')
             ->whereRaw($filter . ' = ?', [$current])
             ->orWhereRaw($filter . ' = ?', [$previous])
             ->groupByRaw($filter)
@@ -36,7 +28,7 @@ trait ExpenseTrait
         ];
         foreach ($expenseCollection as $expenseItem) {
             $expenseType = $expenseItem->time_period == $current ? 'current' : 'previous';
-            $expenses[$expenseType] = $expenseItem->expense;
+            $expenses[$expenseType] = $expenseItem->total_price ?? 0;
         }
         return $expenses;
     }

@@ -29,7 +29,7 @@
                 <span class="time-period-filter">(This week)</span>
             </div>
             <div class="m-card-body">
-                <p>{{ 'Rs. ' . $expense->current }}</p>
+                <p>{{ 'Rs. ' . number_format($expense->current, 1) }}</p>
             </div>
             <div class="m-card-footer">
                 <x-profit-loss-percent value="{{ $expense->first_period_percent }}" period="Week" />
@@ -42,7 +42,7 @@
                 <span class="time-period-filter">(This week)</span>
             </div>
             <div class="m-card-body">
-                <p>{{ 'Rs. ' . $revenue->current }}</p>
+                <p>{{ 'Rs. ' . number_format($revenue->current, 1) }}</p>
             </div>
             <div class="m-card-footer">
                 <x-profit-loss-percent value="{{ $revenue->first_period_percent }}" period="Week" />
@@ -58,7 +58,7 @@
                 <p>{{ 'Rs. ' . $profit->current }}</p>
             </div>
             <div class="m-card-footer">
-                <x-profit-loss-percent value="{{ $profit->weekProfitPercent }}" period="Week" />
+                <x-profit-loss-percent value="{{ $profit->first_period_percent }}" period="Week" />
                 <x-profit-loss-percent value="{{ '+0.0' }}" period="Month" />
             </div>
         </div>

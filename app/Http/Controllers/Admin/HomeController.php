@@ -21,6 +21,9 @@ class HomeController extends Controller
          * ! PROBLEM :: Expense & Revenue are estimated from entire data
          * * SOLUTION :: Create new table that will store the stock incoming & outgoing history 
          * *             and fetch the Expenses & Revenue from those tables.
+         * 
+         * ? Expenses table created and functionality added to add the entire spended amount (total sum of cost_price) on the product
+         * ? while adding the new stock
          */
         $profit = $this->getWeeklyProfit();
         $item_sold = $this->getSoldItems();
