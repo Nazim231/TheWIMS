@@ -25,4 +25,9 @@ class ShopOrderProduct extends Model
     {
         return $this->belongsTo(ProductVariation::class, 'variation_id');
     }
+
+    public function approvals()
+    {
+        return $this->hasMany(OrderApproval::class);
+    }
 }

@@ -10,6 +10,7 @@ use App\Models\ShopOrderProduct;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\ApproveShopOrderRequest;
+use App\Models\OrderApproval;
 
 class OrdersController extends Controller
 {
@@ -67,6 +68,12 @@ class OrdersController extends Controller
             $product->approved_quantity = $product->approved_quantity + $req->approved_quantity[$key];
             $productVariationIds[] = $product->variation_id;
             $product->save();
+            $approvalData = [
+                'order_product_id' => $product->id,
+                'variation_id' => $product->variation_id,
+                'quantity' => $req->approved_quantity[$key]
+            ];
+            OrderApproval::create($approvalData);
         }
 
         $numOrderProducts = $order_products->count();
