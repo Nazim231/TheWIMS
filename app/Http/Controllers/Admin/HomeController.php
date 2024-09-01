@@ -10,22 +10,11 @@ use Illuminate\Routing\Controller;
 
 class HomeController extends Controller
 {
-    use ProfitTrait;
-    use ItemSoldTrait;
-    use ExpenseTrait;
-    use RevenueTrait;
+    use ProfitTrait, ItemSoldTrait, ExpenseTrait, RevenueTrait;
 
     public function index()
     {
-        /**
-         * ! PROBLEM :: Expense & Revenue are estimated from entire data
-         * * SOLUTION :: Create new table that will store the stock incoming & outgoing history 
-         * *             and fetch the Expenses & Revenue from those tables.
-         * 
-         * ? Expenses table created and functionality added to add the entire spended amount (total sum of cost_price) on the product
-         * ? while adding the new stock
-         */
-        $profit = $this->getWeeklyProfit();
+        $profit = $this->getProfits();
         $item_sold = $this->getSoldItems();
         $expense = $this->getExpenses();
         $revenue = $this->getRevenues();

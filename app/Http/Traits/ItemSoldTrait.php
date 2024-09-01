@@ -2,21 +2,12 @@
 
 namespace App\Http\Traits;
 
-use Carbon\Carbon;
-use App\Models\Invoice;
-use App\Models\InvoiceProduct;
 use App\Models\OrderApproval;
-use App\Models\ShopOrderProduct;
 
 trait ItemSoldTrait
 {
     use TimePeriodValueTrait;
 
-    /**
-     * ! PROBLEM :: If some quantity is approved from the orders, then entire approved quantity is added
-     * * Create another table for warehouse order approval history which will help to get the history of approved
-     * * items of shop orders with shop_id, order_id, variation_id, approved_quantity 
-     */
     private function getSoldItemsFromDB($type)
     {
         $current = $this->getCurrentDateValue($type);

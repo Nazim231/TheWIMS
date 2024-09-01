@@ -2,24 +2,21 @@
 
 namespace App\Http\Traits;
 
-use Carbon\Carbon;
-use App\Models\InvoiceProduct;
-use Illuminate\Support\Facades\DB;
+use App\Models\OrderApproval;
 
 trait ProfitTrait
 {
     use TimePeriodValueTrait;
 
-    private function getWeekProfitFromDB($type)
+    private function getProfitFromDB($type)
     {
         $current = $this->getCurrentDateValue($type);
         $previous = $current - 1;
         
-        $filter = $type . '(invoices.created_at)';
-        $profitsCollection = InvoiceProduct::join('product_variations as pv', 'variation_id', 'pv.id')
-            ->join('invoices', 'invoice_id', 'invoices.id')
+        $filter = $type . '(order_approvals.created_at)';
+        $profitsCollection = OrderApproval::selectRaw('SUM(order_approvals.quantity - (price - cost_price)) as profit')
             ->selectRaw($filter . ' as time_period')
-            ->selectRaw('SUM(total_price - (cost_price * invoice_products.quantity)) as profit')
+            ->join('product_variations as pv', 'variation_id', 'pv.id')
             ->whereRaw($filter . ' = ?', [$current])
             ->orWhereRaw($filter . ' = ?', [$previous])
             ->groupByRaw($filter)
@@ -36,9 +33,9 @@ trait ProfitTrait
         return $profit;
     }
 
-    public function getWeeklyProfit($type = 'week')
+    public function getProfits($type = 'week')
     {
-        $profit = $this->getWeekProfitFromDB($type);
+        $profit = $this->getProfitFromDB($type);
 
         $currProfit = $profit['current'];
         $prevProfit = $profit['previous'];

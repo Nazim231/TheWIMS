@@ -2,9 +2,7 @@
 
 namespace App\Http\Traits;
 
-use Carbon\Carbon;
-use App\Models\ShopsStock;
-use App\Models\ExpenseItem;
+use App\Models\OrderApproval;
 
 trait RevenueTrait
 {
@@ -15,15 +13,8 @@ trait RevenueTrait
         $current = $this->getCurrentDateValue($type);
         $previous = $current - 1;
 
-        $filter = $type . '(expense_items.created_at)';
-        // $revenueCollection = ShopsStock::join('product_variations as pv', 'variation_id', 'pv.id')
-        // ->selectRaw($filter . ' as time_period')
-        // ->selectRaw('SUM(shops_stock.quantity * pv.price) as revenue')
-        // ->whereRaw($filter . ' = ?', [$current])
-        // ->orWhereRaw($filter . ' = ?', [$previous])
-        // ->groupByRaw($filter)
-        // ->get();
-        $revenueCollection = ExpenseItem::selectRaw('SUM(pv.price * expense_items.quantity)/2 as revenue')
+        $filter = $type . '(order_approvals.created_at)';
+        $revenueCollection = OrderApproval::selectRaw('SUM(order_approvals.quantity * price) as revenue')
             ->selectRaw($filter . ' as time_period')
             ->join('product_variations as pv', 'variation_id', 'pv.id')
             ->whereRaw($filter . ' = ?', [$current])

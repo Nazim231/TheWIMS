@@ -3,8 +3,6 @@
 namespace App\Http\Traits;
 
 use App\Models\Expense;
-use App\Models\ProductVariation;
-use Carbon\Carbon;
 
 trait ExpenseTrait
 {
