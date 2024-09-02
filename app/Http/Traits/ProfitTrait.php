@@ -14,7 +14,7 @@ trait ProfitTrait
         $previous = $current - 1;
         
         $filter = $type . '(order_approvals.created_at)';
-        $profitsCollection = OrderApproval::selectRaw('SUM(order_approvals.quantity - (price - cost_price)) as profit')
+        $profitsCollection = OrderApproval::selectRaw('SUM(order_approvals.quantity * (price - cost_price)) as profit')
             ->selectRaw($filter . ' as time_period')
             ->join('product_variations as pv', 'variation_id', 'pv.id')
             ->whereRaw($filter . ' = ?', [$current])

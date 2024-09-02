@@ -72,13 +72,23 @@
                     <th>S. No</th>
                     <th>Product</th>
                     <th>SKU</th>
-                    <th>Sales</th>
+                    <th>Daily Sales</th>
                     <th>Cost Price</th>
                     <th>Profit</th>
-                    <th>Sales Week</th>
+                    <th>Weekly Sales</th>
                 </thead>
                 <tbody>
-                    <tr></tr>
+                    @foreach ($trendings as $item)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $item->name }}</td>
+                            <td>{{ $item->SKU }}</td>
+                            <td>{{ number_format($item->daily_sale, $places = 1)  }}</td>
+                            <td>{{ $item->cost_price }}</td>
+                            <td>{{ $item->price - $item->cost_price }}</td>
+                            <td>{{ $item->week_sales }}</td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
